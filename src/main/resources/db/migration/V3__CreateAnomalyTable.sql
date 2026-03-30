@@ -1,0 +1,10 @@
+CREATE TABLE anomaly(
+  anomaly_id SERIAL PRIMARY KEY,
+  user_id INT NOT NULL ,
+  event_time BIGINT NOT NULL,
+  type VARCHAR(50) NOT NULL ,
+  sum DOUBLE PRECISION NOT NULL ,
+  avg_check DOUBLE PRECISION NOT NULL ,
+  message TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
