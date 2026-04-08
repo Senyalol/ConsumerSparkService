@@ -25,8 +25,8 @@ spring:
     hibernate:
       ddl-auto: validate
 
-  session:
-    store-type: jdbc
+#  session:
+#    store-type: none #jdbc
 
 server:
   port: 8080
