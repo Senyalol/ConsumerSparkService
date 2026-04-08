@@ -1,13 +1,12 @@
 package com.bankSpark.analyticsService.ORM;
 
+import com.bankSpark.analyticsService.ORM.User;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "segmentusers")
 public class Segmentuser {
@@ -20,7 +19,7 @@ public class Segmentuser {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "user_id", nullable = false)
-    private com.bankSpark.analyticsService.User user;
+    private User user;
 
     @Column(name = "segment", nullable = false, length = 20)
     private String segment;
