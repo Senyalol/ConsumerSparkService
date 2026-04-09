@@ -3,7 +3,7 @@ package com.bankSpark.analyticsService.DTO;
 import lombok.Data;
 
 @Data
-public class SegmentuserDTO {
+public class SegmentUserDTO {
 
     private Integer uSegmentId;
 
