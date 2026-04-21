@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface AnomalyRepository extends JpaRepository<Anomaly,Integer> {
 
     Optional<Anomaly> findById(int id);
-    Optional<Anomaly> findByUserId(int id);
+    List<Anomaly> findByUserId(int id);
     List<Anomaly> findByType(String type);
     List<Anomaly> findByEventTime(Long eventTime);
 
