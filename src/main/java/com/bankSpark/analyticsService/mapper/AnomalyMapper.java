@@ -6,6 +6,9 @@ import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class AnomalyMapper {
 
@@ -17,7 +20,7 @@ public class AnomalyMapper {
     }
 
     //Из сущности в DTO
-    private AnomalyDTO toDTO(Anomaly anomaly) {
+    public AnomalyDTO toDTO(Anomaly anomaly) {
 
         AnomalyDTO dto = new AnomalyDTO();
         dto.setAnomalyId(anomaly.getId());
@@ -32,7 +35,7 @@ public class AnomalyMapper {
     }
 
     //Из DTO в сущность
-    private Anomaly toEntity(AnomalyDTO anomalyDTO) {
+    public Anomaly toEntity(AnomalyDTO anomalyDTO) {
 
         Anomaly anomaly = new Anomaly();
         anomaly.setId(anomalyDTO.getAnomalyId());
@@ -44,6 +47,12 @@ public class AnomalyMapper {
         anomaly.setMessage(anomalyDTO.getMessage());
 
         return anomaly;
+    }
+
+    //Из листа сущностей в лист DTO
+    public List<AnomalyDTO> toListDTO(List<Anomaly> anomalyList) {
+        return anomalyList.stream()
+                .map(x -> this.toDTO(x)).collect(Collectors.toList());
     }
 
 }

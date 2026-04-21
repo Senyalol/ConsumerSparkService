@@ -1,4 +1,4 @@
-package com.bankSpark.analyticsService.facade;
+package com.bankSpark.analyticsService.facade.anomaly;
 
 import com.bankSpark.analyticsService.DTO.AnomalyDTO;
 
