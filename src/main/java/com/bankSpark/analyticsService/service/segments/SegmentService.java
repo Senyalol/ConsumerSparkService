@@ -16,15 +16,34 @@ public interface SegmentService {
 
     List<Segmentuser> getSegmentsByUser(String firstName, String lastName);
 
+    //Отсрортировать по фиксированному сегменту (словарь проверка)
+
     List<Segmentuser> getCertainSegments(String segment);
 
-    //Касаемо этих 3-х параметров - добавить больше функционала - больше, меньше, Промежуток
+    //Главные метрики
 
-    List<Segmentuser> getSegmentsByR(Double r);
+    //R
+    List<Segmentuser> getSegmentsByRMore(Double r);
 
-    List<Segmentuser> getSegmentsByF(Long f);
+    List<Segmentuser> getSegmentsByRLess(Double r);
 
-    List<Segmentuser> getSegmentsByM(Double m);
+    List<Segmentuser> getSegmentsByRRange(Double min, Double max);
+
+    //F
+
+    List<Segmentuser> getSegmentsByFLess(Long f);
+
+    List<Segmentuser> getSegmentsByFMore(Long f);
+
+    List<Segmentuser> getSegmentsByFRange(Long min, Long max);
+
+    //M
+
+    List<Segmentuser> getSegmentsByMMore(Double m);
+
+    List<Segmentuser> getSegmentsByMLess(Double m);
+
+    List<Segmentuser> getSegmentsByMRange(Double min, Double max);
 
     //Методы для получения самых новых/старых данных
     //Зачем поле updated_at - если у меня есть окно в 5 минут и по сути данные обновляются одновременно

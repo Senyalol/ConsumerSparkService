@@ -6,6 +6,9 @@ import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class SegmentUMapper {
 
@@ -44,6 +47,13 @@ public class SegmentUMapper {
         segmentuser.setUpdatedAt(segmentUserDTO.getUpdatedAt());
 
         return segmentuser;
+    }
+
+    //В лист DTO
+    public List<SegmentUserDTO> toListDTO(List<Segmentuser> segmentusers) {
+        return segmentusers.stream()
+                .map(x -> this.toDTO(x))
+                .collect(Collectors.toList());
     }
 
 }

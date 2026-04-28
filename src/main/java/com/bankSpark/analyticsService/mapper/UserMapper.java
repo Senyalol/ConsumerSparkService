@@ -4,6 +4,9 @@ import com.bankSpark.analyticsService.DTO.UserDTO;
 import com.bankSpark.analyticsService.ORM.User;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserMapper {
 
@@ -27,6 +30,13 @@ public class UserMapper {
         user.setLastname(userDTO.getLastname());
 
         return user;
+    }
+
+    //В лист DTO
+    public List<UserDTO> toListDTO(List<User> users) {
+        return users.stream()
+                .map(x -> this.toDTO(x))
+                .collect(Collectors.toList());
     }
 
 }
