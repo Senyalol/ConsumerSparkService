@@ -2,6 +2,21 @@ version: '3.8'
 
 services:
 
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB: userSegmentsDB
+      POSTGRES_PORT: 5432
+      POSTGRES_HOST: postgres-segments
+    depends_on:
+      - postgres-segments
+    networks:
+      - app-network
+
   postgres-segments:
     image: postgres:17
     container_name: analyticsPersist
