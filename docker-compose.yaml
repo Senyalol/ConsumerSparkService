@@ -12,6 +12,11 @@ services:
       POSTGRES_DB: userSegmentsDB
       POSTGRES_PORT: 5432
       POSTGRES_HOST: postgres-segments
+      #Kafka
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka_producer:9092
+      SPRING_KAFKA_CONSUMER_GROUP_ID: analytics-service-group
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_CONSUMER_ENABLE_AUTO_COMMIT: "false"
     depends_on:
       - postgres-segments
     networks:

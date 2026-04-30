@@ -6,7 +6,8 @@ COPY . .
 
 RUN mvn clean install -DskipTests
 
-FROM eclipse-temurin:23-jre-alpine
+#FROM eclipse-temurin:23-jre-alpine
+FROM eclipse-temurin:23-jdk
 
 WORKDIR /web
 
