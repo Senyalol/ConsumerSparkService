@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.service.segments;
 
-import com.bankSpark.analyticsService.ORM.Segmentuser;
+import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.repository.SegmentURepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,31 +20,31 @@ public class SegmentServiceImpl implements SegmentService {
     }
 
     @Override
-    public List<Segmentuser> getAllSegments() {
+    public List<SegmentUser> getAllSegments() {
         return segmentURepository.findAll();
     }
 
     @Override
-    public Segmentuser getSegmentById(int id) {
+    public SegmentUser getSegmentById(int id) {
         return segmentURepository.findById(id).get();
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByUser(int userId) {
+    public List<SegmentUser> getSegmentsByUser(int userId) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByUser(String lastName) {
+    public List<SegmentUser> getSegmentsByUser(String lastName) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getUser().getLastname().equals(lastName))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByUser(String firstName, String lastName) {
+    public List<SegmentUser> getSegmentsByUser(String firstName, String lastName) {
         return segmentURepository.findAll()
                 .stream()
                 .filter(x -> x.getUser().getFirstname().equals(firstName) && x.getUser().getLastname().equals(lastName))
@@ -52,27 +52,27 @@ public class SegmentServiceImpl implements SegmentService {
     }
 
     @Override
-    public List<Segmentuser> getCertainSegments(String segment) {
+    public List<SegmentUser> getCertainSegments(String segment) {
         return segmentURepository.findBySegment(segment);
     }
 
 
     @Override
-    public List<Segmentuser> getSegmentsByRLess(Double r) {
+    public List<SegmentUser> getSegmentsByRLess(Double r) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getRMinutes() < r)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByRRange(Double min, Double max) {
+    public List<SegmentUser> getSegmentsByRRange(Double min, Double max) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getRMinutes() >= min && x.getRMinutes() <= max)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByFLess(Long f) {
+    public List<SegmentUser> getSegmentsByFLess(Long f) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getF() <= f)
                 .collect(Collectors.toList());
@@ -80,7 +80,7 @@ public class SegmentServiceImpl implements SegmentService {
 
 
     @Override
-    public List<Segmentuser> getSegmentsByFRange(Long min, Long max) {
+    public List<SegmentUser> getSegmentsByFRange(Long min, Long max) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getF() >= min && x.getF() <= max)
                 .collect(Collectors.toList());
@@ -88,14 +88,14 @@ public class SegmentServiceImpl implements SegmentService {
 
 
     @Override
-    public List<Segmentuser> getSegmentsByMLess(Double m) {
+    public List<SegmentUser> getSegmentsByMLess(Double m) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getM() <= m)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByMRange(Double min, Double max) {
+    public List<SegmentUser> getSegmentsByMRange(Double min, Double max) {
         return segmentURepository.findAll().stream()
                 .filter(x -> x.getM() >= min && x.getM() <= max)
                 .collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class SegmentServiceImpl implements SegmentService {
 
     //Вопросик по поводу Equals
     @Override
-    public List<Segmentuser> getSegmentsByRMore(Double r) {
+    public List<SegmentUser> getSegmentsByRMore(Double r) {
         return segmentURepository.findAll()
                 .stream()
                 .filter(x -> x.getRMinutes() >= r)
@@ -111,7 +111,7 @@ public class SegmentServiceImpl implements SegmentService {
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByFMore(Long f) {
+    public List<SegmentUser> getSegmentsByFMore(Long f) {
         return segmentURepository.findAll()
                 .stream()
                 .filter(x -> x.getF() >= f)
@@ -119,7 +119,7 @@ public class SegmentServiceImpl implements SegmentService {
     }
 
     @Override
-    public List<Segmentuser> getSegmentsByMMore(Double m) {
+    public List<SegmentUser> getSegmentsByMMore(Double m) {
         return segmentURepository.findAll()
                 .stream()
                 .filter(x -> x.getM() >= m)

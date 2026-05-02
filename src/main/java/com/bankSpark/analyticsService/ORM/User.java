@@ -1,7 +1,5 @@
 package com.bankSpark.analyticsService.ORM;
 
-import com.bankSpark.analyticsService.ORM.Anomaly;
-import com.bankSpark.analyticsService.ORM.Segmentuser;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.LinkedHashSet;
@@ -27,6 +25,6 @@ public class User {
     private Set<Anomaly> anomalies = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "user")
-    private Set<Segmentuser> segmentusers = new LinkedHashSet<>();
+    private Set<SegmentUser> segmentUsers = new LinkedHashSet<>();
 
 }

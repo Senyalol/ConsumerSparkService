@@ -1,6 +1,5 @@
 package com.bankSpark.analyticsService.ORM;
 
-import com.bankSpark.analyticsService.ORM.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;
@@ -9,7 +8,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Data
 @Entity
 @Table(name = "segmentusers")
-public class Segmentuser {
+public class SegmentUser {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "segmentusers_id_gen")
     @SequenceGenerator(name = "segmentusers_id_gen", sequenceName = "segmentusers_segment_id_seq", allocationSize = 1)

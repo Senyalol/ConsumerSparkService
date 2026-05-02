@@ -1,5 +1,7 @@
 package com.bankSpark.analyticsService.kafka;
 
+import com.bankSpark.analyticsService.ORM.Anomaly;
+import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
@@ -30,6 +32,8 @@ public class KafkaConfig {
         return config;
     }
 
+    //Контейнеры User
+
     @Bean
     public ConsumerFactory<String, User> userConsumerFactory(){
         Map<String, Object> props = basicConfig();
@@ -45,5 +49,47 @@ public class KafkaConfig {
         factory.setConcurrency(1);
         return factory;
     }
+
+    //Контейнеры User
+
+    //Контейнеры SegmentUser
+
+    @Bean
+    public ConsumerFactory<String, SegmentUser> segmentUserConsumerFactory(){
+        Map<String, Object> props = basicConfig();
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,SegmentUser.class);
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, SegmentUser> segmentUserKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, SegmentUser> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(segmentUserConsumerFactory());
+        factory.setConcurrency(1);
+        return factory;
+    }
+
+    //Контейнеры SegmentUser
+
+    //Контейнеры Anomaly
+
+    @Bean
+    public ConsumerFactory<String, Anomaly> anomalyConsumerFactory(){
+        Map<String, Object> props = basicConfig();
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,Anomaly.class);
+        return new DefaultKafkaConsumerFactory<>(props);
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Anomaly> anomalyKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, Anomaly> factory = new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(anomalyConsumerFactory());
+        factory.setConcurrency(1);
+        return factory;
+    }
+
+    //Контейнеры Anomaly
 
 }

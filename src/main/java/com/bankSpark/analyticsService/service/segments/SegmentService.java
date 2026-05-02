@@ -1,49 +1,49 @@
 package com.bankSpark.analyticsService.service.segments;
 
-import com.bankSpark.analyticsService.ORM.Segmentuser;
+import com.bankSpark.analyticsService.ORM.SegmentUser;
 
 import java.util.List;
 
 public interface SegmentService {
 
-    List<Segmentuser> getAllSegments();
+    List<SegmentUser> getAllSegments();
 
-    Segmentuser getSegmentById(int id);
+    SegmentUser getSegmentById(int id);
 
-    List<Segmentuser> getSegmentsByUser(int userId); //Прегрузка
+    List<SegmentUser> getSegmentsByUser(int userId); //Прегрузка
 
-    List<Segmentuser> getSegmentsByUser(String lastName);
+    List<SegmentUser> getSegmentsByUser(String lastName);
 
-    List<Segmentuser> getSegmentsByUser(String firstName, String lastName);
+    List<SegmentUser> getSegmentsByUser(String firstName, String lastName);
 
     //Отсрортировать по фиксированному сегменту (словарь проверка)
 
-    List<Segmentuser> getCertainSegments(String segment);
+    List<SegmentUser> getCertainSegments(String segment);
 
     //Главные метрики
 
     //R
-    List<Segmentuser> getSegmentsByRMore(Double r);
+    List<SegmentUser> getSegmentsByRMore(Double r);
 
-    List<Segmentuser> getSegmentsByRLess(Double r);
+    List<SegmentUser> getSegmentsByRLess(Double r);
 
-    List<Segmentuser> getSegmentsByRRange(Double min, Double max);
+    List<SegmentUser> getSegmentsByRRange(Double min, Double max);
 
     //F
 
-    List<Segmentuser> getSegmentsByFLess(Long f);
+    List<SegmentUser> getSegmentsByFLess(Long f);
 
-    List<Segmentuser> getSegmentsByFMore(Long f);
+    List<SegmentUser> getSegmentsByFMore(Long f);
 
-    List<Segmentuser> getSegmentsByFRange(Long min, Long max);
+    List<SegmentUser> getSegmentsByFRange(Long min, Long max);
 
     //M
 
-    List<Segmentuser> getSegmentsByMMore(Double m);
+    List<SegmentUser> getSegmentsByMMore(Double m);
 
-    List<Segmentuser> getSegmentsByMLess(Double m);
+    List<SegmentUser> getSegmentsByMLess(Double m);
 
-    List<Segmentuser> getSegmentsByMRange(Double min, Double max);
+    List<SegmentUser> getSegmentsByMRange(Double min, Double max);
 
     //Методы для получения самых новых/старых данных
     //Зачем поле updated_at - если у меня есть окно в 5 минут и по сути данные обновляются одновременно

@@ -14,7 +14,7 @@ public class UserMapper {
     public UserDTO toDTO(User user) {
 
         UserDTO userDTO = new UserDTO();
-        userDTO.setUserId(user.getId());
+        userDTO.setUser_id(user.getId());
         userDTO.setFirstname(user.getFirstname());
         userDTO.setLastname(user.getLastname());
 
@@ -25,7 +25,7 @@ public class UserMapper {
     public User toEntity(UserDTO userDTO) {
 
         User user = new User();
-        user.setId(userDTO.getUserId());
+        user.setId(userDTO.getUser_id());
         user.setFirstname(userDTO.getFirstname());
         user.setLastname(userDTO.getLastname());
 

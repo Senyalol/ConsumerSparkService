@@ -1,7 +1,7 @@
 package com.bankSpark.analyticsService.mapper;
 
 import com.bankSpark.analyticsService.DTO.SegmentUserDTO;
-import com.bankSpark.analyticsService.ORM.Segmentuser;
+import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ public class SegmentUMapper {
     }
 
     //Из сущности в DTO
-    public SegmentUserDTO toDTO(Segmentuser segmentuser) {
+    public SegmentUserDTO toDTO(SegmentUser segmentuser) {
 
         SegmentUserDTO segmentUserDTO = new SegmentUserDTO();
         segmentUserDTO.setUSegmentId(segmentuser.getId());
@@ -35,9 +35,9 @@ public class SegmentUMapper {
     }
 
     //Из DTO в сущность
-    public Segmentuser toEntity(SegmentUserDTO segmentUserDTO) {
+    public SegmentUser toEntity(SegmentUserDTO segmentUserDTO) {
 
-        Segmentuser segmentuser = new Segmentuser();
+        SegmentUser segmentuser = new SegmentUser();
         segmentuser.setId(segmentUserDTO.getUSegmentId());
         segmentuser.setUser(userRepository.findById(segmentUserDTO.getUserId()).get());
         segmentuser.setSegment(segmentUserDTO.getSegment());
@@ -50,8 +50,8 @@ public class SegmentUMapper {
     }
 
     //В лист DTO
-    public List<SegmentUserDTO> toListDTO(List<Segmentuser> segmentusers) {
-        return segmentusers.stream()
+    public List<SegmentUserDTO> toListDTO(List<SegmentUser> segmentUsers) {
+        return segmentUsers.stream()
                 .map(x -> this.toDTO(x))
                 .collect(Collectors.toList());
     }
