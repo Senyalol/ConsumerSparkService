@@ -1,6 +1,7 @@
 package com.bankSpark.analyticsService.mapper;
 
-import com.bankSpark.analyticsService.DTO.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.ORM.Anomaly;
 import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,21 @@ public class AnomalyMapper {
     public List<AnomalyDTO> toListDTO(List<Anomaly> anomalyList) {
         return anomalyList.stream()
                 .map(x -> this.toDTO(x)).collect(Collectors.toList());
+    }
+
+    //Маппинг DTO в сущность из Kafka
+    public Anomaly fromKafkaDTOtoEntity(KafkaAnomalyDTO anomalyDTO) {
+
+        Anomaly anomaly = new Anomaly();
+        anomaly.setUser(userRepository.findById(anomalyDTO.getUser_id()).get());
+        anomaly.setEventTime(anomalyDTO.getEvent_time());
+        anomaly.setType(anomalyDTO.getType());
+        anomaly.setSum(anomalyDTO.getSum());
+        anomaly.setAvgCheck(anomalyDTO.getAvg_check_5min());
+        anomaly.setMessage(anomalyDTO.getMessage());
+
+        return anomaly;
+
     }
 
 }

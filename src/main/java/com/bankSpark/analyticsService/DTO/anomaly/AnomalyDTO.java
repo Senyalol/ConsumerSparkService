@@ -1,4 +1,4 @@
-package com.bankSpark.analyticsService.DTO;
+package com.bankSpark.analyticsService.DTO.anomaly;
 
 import lombok.Data;
 

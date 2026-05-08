@@ -1,9 +1,14 @@
 package com.bankSpark.analyticsService.kafka;
 
+import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.Anomaly;
 import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
-import com.bankSpark.analyticsService.mapper.UserMapper;
+import com.bankSpark.analyticsService.mapper.AnomalyMapper;
+import com.bankSpark.analyticsService.mapper.SegmentUMapper;
 import com.bankSpark.analyticsService.repository.AnomalyRepository;
 import com.bankSpark.analyticsService.repository.SegmentURepository;
 import com.bankSpark.analyticsService.repository.UserRepository;
@@ -19,14 +24,21 @@ public class KafkaConsumerService {
     private final SegmentURepository segmentURepository;
     private final AnomalyRepository anomalyRepository;
 
+    private final SegmentUMapper segmentUMapper;
+    private final AnomalyMapper anomalyMapper;
+
     @Autowired
     public KafkaConsumerService(UserRepository userRepository,
                                 SegmentURepository segmentURepository,
-                                AnomalyRepository anomalyRepository) {
+                                AnomalyRepository anomalyRepository,
+                                SegmentUMapper segmentUMapper,
+                                AnomalyMapper anomalyMapper) {
 
         this.userRepository = userRepository;
         this.segmentURepository = segmentURepository;
         this.anomalyRepository = anomalyRepository;
+        this.segmentUMapper = segmentUMapper;
+        this.anomalyMapper = anomalyMapper;
 
     }
 
@@ -45,13 +57,14 @@ public class KafkaConsumerService {
     }
 
     @KafkaListener(topics = "user-segments", containerFactory = "segmentUserKafkaListenerContainerFactory")
-    public void listenSasKafka(SegmentUser recievedSegmentU) throws JsonProcessingException {
+    public void listenSegmentsUsersKafka(KafkaSegmentUserDTO recievedSegmentU) throws JsonProcessingException {
         System.out.println(recievedSegmentU);
 
         try {
 
            // if(segmentURepository.findByUserId(recievedSegmentU.getUser().getId()).isEmpty()){
-                segmentURepository.save(recievedSegmentU);
+                SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU);
+                segmentURepository.save(segmentUser);
 //            }
 //
 //            else{
@@ -66,11 +79,12 @@ public class KafkaConsumerService {
     }
 
     @KafkaListener(topics = "alerts", containerFactory = "anomalyKafkaListenerContainerFactory")
-    public void listenAnomalyKafka(Anomaly recievedAnomaly) throws JsonProcessingException {
+    public void listenAnomalyKafka(KafkaAnomalyDTO recievedAnomaly) throws JsonProcessingException {
         System.out.println(recievedAnomaly);
 
         try{
-            anomalyRepository.save(recievedAnomaly);
+            Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly);
+            anomalyRepository.save(anomaly);
         }
         catch (Exception e){
             System.out.println("Error user data in object" + e.getMessage());

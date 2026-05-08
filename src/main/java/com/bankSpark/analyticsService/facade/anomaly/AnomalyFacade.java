@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.facade.anomaly;
 
-import com.bankSpark.analyticsService.DTO.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 
 import java.util.List;
 

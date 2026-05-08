@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.facade.anomaly;
 
-import com.bankSpark.analyticsService.DTO.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 import com.bankSpark.analyticsService.mapper.AnomalyMapper;
 import com.bankSpark.analyticsService.service.anomaly.AnomalyService;
 import org.springframework.beans.factory.annotation.Autowired;

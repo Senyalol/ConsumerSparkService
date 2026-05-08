@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.facade.segments;
 
-import com.bankSpark.analyticsService.DTO.SegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.mapper.SegmentUMapper;
 import com.bankSpark.analyticsService.service.segments.SegmentService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.bankSpark.analyticsService.DTO;
+package com.bankSpark.analyticsService.DTO.segmentsRFM;
 
 import lombok.Data;
 
@@ -17,6 +17,7 @@ public class SegmentUserDTO {
 
     private Double m;
 
-    private Long updatedAt;
+    private String updatedAt;
+
 
 }

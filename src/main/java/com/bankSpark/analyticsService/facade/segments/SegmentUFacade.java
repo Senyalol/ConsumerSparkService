@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.facade.segments;
 
-import com.bankSpark.analyticsService.DTO.SegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 
 import java.util.List;
 

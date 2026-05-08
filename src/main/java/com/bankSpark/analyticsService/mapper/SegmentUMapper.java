@@ -1,11 +1,15 @@
 package com.bankSpark.analyticsService.mapper;
 
-import com.bankSpark.analyticsService.DTO.SegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,13 +33,14 @@ public class SegmentUMapper {
         segmentUserDTO.setRMinutes(segmentuser.getRMinutes());
         segmentUserDTO.setF(segmentuser.getF());
         segmentUserDTO.setM(segmentuser.getM());
-        segmentUserDTO.setUpdatedAt(segmentuser.getUpdatedAt());
+        String UpdatedAtString = new Date(segmentuser.getUpdatedAt()).toString();
+        segmentUserDTO.setUpdatedAt(UpdatedAtString);
 
         return segmentUserDTO;
     }
 
     //Из DTO в сущность
-    public SegmentUser toEntity(SegmentUserDTO segmentUserDTO) {
+    public SegmentUser toEntity(SegmentUserDTO segmentUserDTO) throws ParseException {
 
         SegmentUser segmentuser = new SegmentUser();
         segmentuser.setId(segmentUserDTO.getUSegmentId());
@@ -44,7 +49,11 @@ public class SegmentUMapper {
         segmentuser.setRMinutes(segmentUserDTO.getRMinutes());
         segmentuser.setF(segmentUserDTO.getF());
         segmentuser.setM(segmentUserDTO.getM());
-        segmentuser.setUpdatedAt(segmentUserDTO.getUpdatedAt());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        Date date = sdf.parse(segmentUserDTO.getUpdatedAt());
+        Long trueUpdatedAt = date.getTime();
+        segmentuser.setUpdatedAt(trueUpdatedAt);
 
         return segmentuser;
     }
@@ -54,6 +63,23 @@ public class SegmentUMapper {
         return segmentUsers.stream()
                 .map(x -> this.toDTO(x))
                 .collect(Collectors.toList());
+    }
+
+    //Маппинг DTO в сущность из Kafka
+    public SegmentUser fromKafkaDTOtoEntity(KafkaSegmentUserDTO segmentUserDTO) {
+
+        SegmentUser segmentUser = new SegmentUser();
+        segmentUser.setUser(userRepository.findById(segmentUserDTO.getUser_id()).get());
+        segmentUser.setSegment(segmentUserDTO.getSegment());
+        segmentUser.setRMinutes(segmentUserDTO.getR_minutes());
+        segmentUser.setF(segmentUserDTO.getF());
+
+        Double cutM = Math.round(segmentUserDTO.getM() * 100.0) / 100.0;
+        segmentUser.setM(cutM);
+
+        segmentUser.setUpdatedAt(segmentUserDTO.getUpdated_at());
+
+        return segmentUser;
     }
 
 }

@@ -1,5 +1,9 @@
 package com.bankSpark.analyticsService.kafka;
 
+import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
+import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
+import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.Anomaly;
 import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
@@ -55,16 +59,16 @@ public class KafkaConfig {
     //Контейнеры SegmentUser
 
     @Bean
-    public ConsumerFactory<String, SegmentUser> segmentUserConsumerFactory(){
+    public ConsumerFactory<String, KafkaSegmentUserDTO> segmentUserConsumerFactory(){
         Map<String, Object> props = basicConfig();
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,SegmentUser.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,KafkaSegmentUserDTO.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, SegmentUser> segmentUserKafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, SegmentUser> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, KafkaSegmentUserDTO> segmentUserKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, KafkaSegmentUserDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(segmentUserConsumerFactory());
         factory.setConcurrency(1);
         return factory;
@@ -75,16 +79,16 @@ public class KafkaConfig {
     //Контейнеры Anomaly
 
     @Bean
-    public ConsumerFactory<String, Anomaly> anomalyConsumerFactory(){
+    public ConsumerFactory<String, KafkaAnomalyDTO> anomalyConsumerFactory(){
         Map<String, Object> props = basicConfig();
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,Anomaly.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,KafkaAnomalyDTO.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Anomaly> anomalyKafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, Anomaly> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, KafkaAnomalyDTO> anomalyKafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, KafkaAnomalyDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(anomalyConsumerFactory());
         factory.setConcurrency(1);
         return factory;
