@@ -73,7 +73,7 @@ public class SegmentUMapper {
         segmentUser.setSegment(segmentUserDTO.getSegment());
         segmentUser.setRMinutes(segmentUserDTO.getR_minutes());
         segmentUser.setF(segmentUserDTO.getF());
-
+        //Читаемый вид метрик
         Double cutM = Math.round(segmentUserDTO.getM() * 100.0) / 100.0;
         segmentUser.setM(cutM);
 

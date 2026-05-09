@@ -17,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
+import java.util.stream.Collectors;
+
 @Service
 public class KafkaConsumerService {
 
@@ -59,17 +62,24 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "user-segments", containerFactory = "segmentUserKafkaListenerContainerFactory")
     public void listenSegmentsUsersKafka(KafkaSegmentUserDTO recievedSegmentU) throws JsonProcessingException {
         System.out.println(recievedSegmentU);
-
+    
         try {
 
-           // if(segmentURepository.findByUserId(recievedSegmentU.getUser().getId()).isEmpty()){
-                SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU);
-                segmentURepository.save(segmentUser);
-//            }
-//
-//            else{
-//                segmentURepository.
-//            }
+            //Максимум 10 значений сгементов за период
+           if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 1) {
+               SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU);
+               segmentURepository.save(segmentUser);
+           }
+
+           else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 1) {
+
+               SegmentUser oldestSegmentUser = segmentURepository.findOldestByUserId(recievedSegmentU.getUser_id()).get();
+
+
+               updateSegment(oldestSegmentUser,segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU));
+               segmentURepository.save(oldestSegmentUser);
+
+           }
 
         }
         catch (Exception e){
@@ -89,6 +99,19 @@ public class KafkaConsumerService {
         catch (Exception e){
             System.out.println("Error user data in object" + e.getMessage());
         }
+
+    }
+
+
+    //Обновление существующего сегмента
+    private void updateSegment(SegmentUser oldSegment, SegmentUser newSegmentData) {
+
+        oldSegment.setUser(newSegmentData.getUser());
+        oldSegment.setSegment(newSegmentData.getSegment());
+        oldSegment.setRMinutes(newSegmentData.getRMinutes());
+        oldSegment.setF(newSegmentData.getF());
+        oldSegment.setM(newSegmentData.getM());
+        oldSegment.setUpdatedAt(newSegmentData.getUpdatedAt());
 
     }
 
