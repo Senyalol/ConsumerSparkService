@@ -1,11 +1,9 @@
 package com.bankSpark.analyticsService.kafka;
 
-import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
-import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
-import com.bankSpark.analyticsService.ORM.Anomaly;
-import com.bankSpark.analyticsService.ORM.SegmentUser;
+import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
+import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
 import com.bankSpark.analyticsService.mapper.AnomalyMapper;
 import com.bankSpark.analyticsService.mapper.SegmentUMapper;
@@ -16,9 +14,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-
-import java.util.Comparator;
-import java.util.stream.Collectors;
 
 @Service
 public class KafkaConsumerService {
@@ -66,12 +61,12 @@ public class KafkaConsumerService {
         try {
 
             //Максимум 10 значений сгементов за период
-           if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 1) {
+           if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 9) {
                SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU);
                segmentURepository.save(segmentUser);
            }
 
-           else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 1) {
+           else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 9) {
 
                SegmentUser oldestSegmentUser = segmentURepository.findOldestByUserId(recievedSegmentU.getUser_id()).get();
 

@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.service.anomaly;
 
-import com.bankSpark.analyticsService.ORM.Anomaly;
+import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
 import com.bankSpark.analyticsService.repository.AnomalyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

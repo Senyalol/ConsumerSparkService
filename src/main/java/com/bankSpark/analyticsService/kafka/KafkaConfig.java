@@ -1,11 +1,7 @@
 package com.bankSpark.analyticsService.kafka;
 
-import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
-import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
-import com.bankSpark.analyticsService.ORM.Anomaly;
-import com.bankSpark.analyticsService.ORM.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

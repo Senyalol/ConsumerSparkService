@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.service.segments;
 
-import com.bankSpark.analyticsService.ORM.SegmentUser;
+import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import com.bankSpark.analyticsService.repository.SegmentURepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

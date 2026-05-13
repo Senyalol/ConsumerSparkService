@@ -2,7 +2,7 @@ package com.bankSpark.analyticsService.mapper;
 
 import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
-import com.bankSpark.analyticsService.ORM.SegmentUser;
+import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import com.bankSpark.analyticsService.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

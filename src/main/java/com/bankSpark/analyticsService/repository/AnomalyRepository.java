@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.repository;
 
-import com.bankSpark.analyticsService.ORM.Anomaly;
+import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

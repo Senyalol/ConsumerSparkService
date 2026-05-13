@@ -1,5 +1,6 @@
-package com.bankSpark.analyticsService.ORM;
+package com.bankSpark.analyticsService.ORM.segment;
 
+import com.bankSpark.analyticsService.ORM.User;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.OnDelete;

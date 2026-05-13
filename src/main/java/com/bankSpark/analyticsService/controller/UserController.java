@@ -1,12 +1,11 @@
 package com.bankSpark.analyticsService.controller;
 
 import com.bankSpark.analyticsService.DTO.UserDTO;
+import com.bankSpark.analyticsService.http.HttpResponseController;
 import com.bankSpark.analyticsService.facade.users.UserFacade;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,23 +21,23 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userFacade.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return HttpResponseController.build(userFacade.getAllUsers());
     }
 
-    @GetMapping("/id")
-    public UserDTO getUserById(@RequestParam int id) {
-        return userFacade.getUserById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+        return HttpResponseController.buildWithId(userFacade.getUserById(id),id);
     }
 
     @GetMapping("/name")
-    public List<UserDTO> getUserByName(@RequestParam String name) {
-        return userFacade.getUsersByFirstName(name);
+    public ResponseEntity<List<UserDTO>> getUserByName(@RequestParam String name) {
+        return HttpResponseController.buildWithStringValue(userFacade.getUsersByFirstName(name),name);
     }
 
     @GetMapping("/lastname")
-    public List<UserDTO> getUserByLastName(@RequestParam String lastName) {
-        return userFacade.getUsersByLastName(lastName);
+    public ResponseEntity<List<UserDTO>> getUserByLastName(@RequestParam String lastName) {
+        return HttpResponseController.buildWithStringValue(userFacade.getUsersByLastName(lastName),lastName);
     }
 
 }

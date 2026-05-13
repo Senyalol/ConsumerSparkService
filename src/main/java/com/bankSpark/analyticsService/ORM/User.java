@@ -1,5 +1,7 @@
 package com.bankSpark.analyticsService.ORM;
 
+import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
+import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.util.LinkedHashSet;

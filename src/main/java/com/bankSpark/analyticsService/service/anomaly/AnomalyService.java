@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.service.anomaly;
 
-import com.bankSpark.analyticsService.ORM.Anomaly;
+import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
 
 import java.util.List;
 

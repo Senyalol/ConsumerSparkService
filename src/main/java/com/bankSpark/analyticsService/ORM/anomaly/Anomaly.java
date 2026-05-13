@@ -1,4 +1,4 @@
-package com.bankSpark.analyticsService.ORM;
+package com.bankSpark.analyticsService.ORM.anomaly;
 
 import com.bankSpark.analyticsService.ORM.User;
 import jakarta.persistence.*;

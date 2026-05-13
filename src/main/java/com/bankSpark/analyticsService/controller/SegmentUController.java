@@ -2,11 +2,10 @@ package com.bankSpark.analyticsService.controller;
 
 import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.facade.segments.SegmentUFacade;
+import com.bankSpark.analyticsService.http.HttpResponseController;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,80 +24,140 @@ public class SegmentUController {
     }
 
     @GetMapping
-    public List<SegmentUserDTO> getAllSegments() {
-        return segmentUFacade.getAllSegments();
+    public ResponseEntity<List<SegmentUserDTO>> getAllSegments() {
+        return HttpResponseController.build(segmentUFacade.getAllSegments());
     }
 
-    @GetMapping("/id")
-    public SegmentUserDTO getSegmentById(@RequestParam int id) {
-        return segmentUFacade.getSegmentById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<SegmentUserDTO> getSegmentById(@PathVariable int id) {
+        return HttpResponseController.buildWithId(segmentUFacade.getSegmentById(id),id);
     }
 
     @GetMapping("/user")
-    public List<SegmentUserDTO> getSegmentsByUserId(@RequestParam int userId) {
-        return segmentUFacade.getSegmentsByUser(userId);
+    public ResponseEntity<List<SegmentUserDTO>> getSegmentsByUserId(@RequestParam int userId) {
+        return HttpResponseController.buildWithId(segmentUFacade.getSegmentsByUser(userId),userId);
     }
 
     //Проверить , написать тесты
     @GetMapping("/username")
-    public List<SegmentUserDTO> getSegmentsByUsername(@RequestParam String lastname, @RequestParam(required = false) String name) {
+    public ResponseEntity<List<SegmentUserDTO>> getSegmentsByUsername(@RequestParam String lastname, @RequestParam(required = false) String name) {
 
         if(name == null){
-            return segmentUFacade.getSegmentsByUser(lastname);
+
+            if(segmentUFacade.getSegmentsByUser(lastname).isEmpty()){
+                return ResponseEntity.noContent().build();
+            }
+
+            return HttpResponseController.buildWithStringValue(segmentUFacade.getSegmentsByUser(lastname),lastname);
         }
 
-        return segmentUFacade.getSegmentsByUser(name, lastname);
+
+        if(segmentUFacade.getSegmentsByUser(name, lastname).isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithStringValue(segmentUFacade.getSegmentsByUser(name, lastname),lastname,name);
     }
 
     @GetMapping("/type")
-    public List<SegmentUserDTO> getSegmentsBySegmentId(@RequestParam String segment) {
-        return segmentUFacade.getCertainSegments(segment);
+    public ResponseEntity<List<SegmentUserDTO>> getSegmentsBySegmentId(@RequestParam String segment) {
+
+        if(segmentUFacade.getCertainSegments(segment).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithExistSegment(segmentUFacade.getCertainSegments(segment),segment);
     }
 
     //Названия маппингов
     @GetMapping("/R/more")
-    public List<SegmentUserDTO> getRMoreSegments(@RequestParam Double R) {
-        return segmentUFacade.getSegmentsByRMore(R);
+    public ResponseEntity<List<SegmentUserDTO>> getRMoreSegments(@RequestParam Double R) {
+
+        if(segmentUFacade.getSegmentsByRMore(R).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByRMore(R),R);
     }
 
     @GetMapping("/R/less")
-    public List<SegmentUserDTO> getRLessSegments(@RequestParam Double R) {
-        return segmentUFacade.getSegmentsByRLess(R);
+    public ResponseEntity<List<SegmentUserDTO>> getRLessSegments(@RequestParam Double R) {
+
+        if(segmentUFacade.getSegmentsByRLess(R).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByRLess(R),R);
     }
 
     @GetMapping("/R/range")
-    public List<SegmentUserDTO> getRRangeSegments(@RequestParam Double min, @RequestParam Double max) {
-        return segmentUFacade.getSegmentsByRRange(min, max);
+    public ResponseEntity<List<SegmentUserDTO>> getRRangeSegments(@RequestParam Double min, @RequestParam Double max) {
+
+        if(segmentUFacade.getSegmentsByRRange(min, max).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithRange(segmentUFacade.getSegmentsByRRange(min, max),min,max);
     }
 
     @GetMapping("/F/more")
-    public List<SegmentUserDTO> getFMoreSegments(@RequestParam Long F) {
-        return segmentUFacade.getSegmentsByFMore(F);
+    public ResponseEntity<List<SegmentUserDTO>> getFMoreSegments(@RequestParam Long F) {
+
+        if(segmentUFacade.getSegmentsByFMore(F).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByFMore(F),F);
     }
 
     @GetMapping("/F/less")
-    public List<SegmentUserDTO> getFLessSegments(@RequestParam Long F) {
-        return segmentUFacade.getSegmentsByFLess(F);
+    public ResponseEntity<List<SegmentUserDTO>> getFLessSegments(@RequestParam Long F) {
+
+        if(segmentUFacade.getSegmentsByFLess(F).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByFLess(F),F);
     }
 
     @GetMapping("/F/range")
-    public List<SegmentUserDTO> getFRangeSegments(@RequestParam Long min, @RequestParam Long max) {
-        return segmentUFacade.getSegmentsByFRange(min, max);
+    public ResponseEntity<List<SegmentUserDTO>> getFRangeSegments(@RequestParam Long min, @RequestParam Long max) {
+
+        if(segmentUFacade.getSegmentsByFRange(min, max).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithRange(segmentUFacade.getSegmentsByFRange(min, max),min,max);
     }
 
     @GetMapping("/M/more")
-    public List<SegmentUserDTO> getMMoreSegments(@RequestParam Double M) {
-        return segmentUFacade.getSegmentsByMMore(M);
+    public ResponseEntity<List<SegmentUserDTO>> getMMoreSegments(@RequestParam Double M) {
+
+        if(segmentUFacade.getSegmentsByMMore(M).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByMMore(M),M);
     }
 
     @GetMapping("/M/less")
-    public List<SegmentUserDTO> getMLessSegments(@RequestParam Double M) {
-        return segmentUFacade.getSegmentsByMLess(M);
+    public ResponseEntity<List<SegmentUserDTO>> getMLessSegments(@RequestParam Double M) {
+
+        if(segmentUFacade.getSegmentsByMLess(M).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByMLess(M),M);
     }
 
     @GetMapping("/M/range")
-    public List<SegmentUserDTO> getMRangeSegments(@RequestParam Double min, @RequestParam Double max) {
-        return segmentUFacade.getSegmentsByMRange(min, max);
+    public ResponseEntity<List<SegmentUserDTO>> getMRangeSegments(@RequestParam Double min, @RequestParam Double max) {
+
+        if(segmentUFacade.getSegmentsByMRange(min, max).isEmpty()){
+            return ResponseEntity.noContent().build();
+        }
+
+        return HttpResponseController.buildWithRange(segmentUFacade.getSegmentsByMRange(min, max),min,max);
     }
 
 }

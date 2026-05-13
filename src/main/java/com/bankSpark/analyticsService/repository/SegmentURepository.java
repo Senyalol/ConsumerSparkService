@@ -1,6 +1,6 @@
 package com.bankSpark.analyticsService.repository;
 
-import com.bankSpark.analyticsService.ORM.SegmentUser;
+import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.jpa.repository.Query;
