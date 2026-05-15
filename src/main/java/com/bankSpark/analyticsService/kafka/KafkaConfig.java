@@ -1,5 +1,6 @@
 package com.bankSpark.analyticsService.kafka;
 
+import com.bankSpark.analyticsService.DTO.UserDTO;
 import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.User;
@@ -35,16 +36,16 @@ public class KafkaConfig {
     //Контейнеры User
 
     @Bean
-    public ConsumerFactory<String, User> userConsumerFactory(){
+    public ConsumerFactory<String, UserDTO> userConsumerFactory(){
         Map<String, Object> props = basicConfig();
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
-        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,User.class);
+        props.put(JsonDeserializer.VALUE_DEFAULT_TYPE,UserDTO.class);
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, User> kafkaListenerContainerFactory(){
-        ConcurrentKafkaListenerContainerFactory<String, User> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, UserDTO> kafkaListenerContainerFactory(){
+        ConcurrentKafkaListenerContainerFactory<String, UserDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(userConsumerFactory());
         factory.setConcurrency(1);
         return factory;

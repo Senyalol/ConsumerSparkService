@@ -12,6 +12,7 @@ import java.util.List;
 //Cors
 //ResponseEntity
 
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
 @RestController
 @RequestMapping("/api/segments")
 public class SegmentUController {

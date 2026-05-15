@@ -36,7 +36,9 @@ public class AnomalyServiceImpl implements AnomalyService {
 
     @Override
     public List<Anomaly> getAnomaliesBySumRange(Double min, Double max) {
-        return List.of();
+        return anomalyRepository.findAll().stream()
+                .filter(x -> x.getSum() >= min && x.getSum() <= max)
+                .collect(Collectors.toList());
     }
 
     @Override
