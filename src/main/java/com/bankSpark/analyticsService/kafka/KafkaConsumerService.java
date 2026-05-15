@@ -70,16 +70,21 @@ public class KafkaConsumerService {
 
             //Максимум 10 значений сгементов за период
            if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 9) {
-               SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU);
+
+               User user = userRepository.findById(recievedSegmentU.getUser_id()).get();
+               SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU,user);
+               Double cutM = Math.round(recievedSegmentU.getM() * 100.0) / 100.0;
+               segmentUser.setM(cutM);
                segmentURepository.save(segmentUser);
+
            }
 
            else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 9) {
 
                SegmentUser oldestSegmentUser = segmentURepository.findOldestByUserId(recievedSegmentU.getUser_id()).get();
 
-
-               updateSegment(oldestSegmentUser,segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU));
+               User user = userRepository.findById(recievedSegmentU.getUser_id()).get();
+               updateSegment(oldestSegmentUser,segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU,user));
                segmentURepository.save(oldestSegmentUser);
 
            }
@@ -97,7 +102,8 @@ public class KafkaConsumerService {
         System.out.println(recievedAnomaly);
 
         try{
-            Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly);
+            User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
+            Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,user);
             anomalyRepository.save(anomaly);
         }
         catch (Exception e){
@@ -115,7 +121,8 @@ public class KafkaConsumerService {
         oldSegment.setSegment(newSegmentData.getSegment());
         oldSegment.setRMinutes(newSegmentData.getRMinutes());
         oldSegment.setF(newSegmentData.getF());
-        oldSegment.setM(newSegmentData.getM());
+        Double cutM = Math.round(newSegmentData.getM() * 100.0) / 100.0;
+        oldSegment.setM(cutM);
         oldSegment.setUpdatedAt(newSegmentData.getUpdatedAt());
 
     }
