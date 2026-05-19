@@ -4,8 +4,11 @@ import com.bankSpark.analyticsService.DTO.UserDTO;
 import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
+import com.bankSpark.analyticsService.ORM.anomaly.AnomalyType;
+import com.bankSpark.analyticsService.ORM.anomaly.TransactionType;
 import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import com.bankSpark.analyticsService.ORM.User;
+import com.bankSpark.analyticsService.exception.AnomalyException;
 import com.bankSpark.analyticsService.exception.KafkaCustomException;
 import com.bankSpark.analyticsService.mapper.AnomalyMapper;
 import com.bankSpark.analyticsService.mapper.SegmentUMapper;
@@ -17,6 +20,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 public class KafkaConsumerService {
@@ -102,9 +107,35 @@ public class KafkaConsumerService {
         System.out.println(recievedAnomaly);
 
         try{
-            User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
-            Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,user);
-            anomalyRepository.save(anomaly);
+
+            if(anomalyRepository.countAnomaliesByUserId(recievedAnomaly.getUser_id()) <= 2) {
+
+                User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
+                Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly, user);
+
+                if(isValidAnomalyValues(anomaly.getType(),anomaly.getMessage())){
+
+                    Double sumRound = Math.round(anomaly.getSum() * 100.0) / 100.0;
+                    anomaly.setSum(sumRound);
+                    Double avgCheckRound = Math.round(anomaly.getAvgCheck() * 100.0) / 100.0;
+                    anomaly.setAvgCheck(avgCheckRound);
+                    anomalyRepository.save(anomaly);
+                }
+                else{
+                    throw new AnomalyException();
+                }
+
+            }
+
+            else if(anomalyRepository.countAnomaliesByUserId(recievedAnomaly.getUser_id()) > 2) {
+
+                Anomaly oldestAnomaly = anomalyRepository.findOldestAnomalyByUserId(recievedAnomaly.getUser_id()).get();
+                User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
+                updateAnomaly(oldestAnomaly,anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,user));
+                anomalyRepository.save(oldestAnomaly);
+
+            }
+
         }
         catch (Exception e){
             //System.out.println("Error user data in object" + e.getMessage());
@@ -125,6 +156,50 @@ public class KafkaConsumerService {
         oldSegment.setM(cutM);
         oldSegment.setUpdatedAt(newSegmentData.getUpdatedAt());
 
+    }
+
+    //Обновление существующей аномалии
+    private void updateAnomaly(Anomaly oldAnomaly, Anomaly newAnomaly) {
+
+        if(isValidAnomalyValues(newAnomaly.getType(),newAnomaly.getMessage())) {
+            oldAnomaly.setUser(newAnomaly.getUser());
+
+            oldAnomaly.setEventTime(newAnomaly.getEventTime());
+            oldAnomaly.setType(newAnomaly.getType());
+
+            Double sumRound = Math.round(newAnomaly.getSum() * 100.0) / 100.0;
+            oldAnomaly.setSum(sumRound);
+
+            Double avgCheckRound = Math.round(newAnomaly.getAvgCheck() * 100.0) / 100.0;
+            oldAnomaly.setAvgCheck(avgCheckRound);
+            oldAnomaly.setMessage(newAnomaly.getMessage());
+        }
+        else{
+            throw new AnomalyException();
+        }
+
+    }
+
+    private boolean isValidAnomalyValues(String type, String message){
+
+        boolean check = false;
+
+        if(type != null && message != null) {
+
+
+            boolean validType = Arrays.stream(TransactionType.values())
+                    .anyMatch(enumType -> enumType.name().equalsIgnoreCase(type));
+
+            boolean validMessage = Arrays.stream(AnomalyType.values())
+                    .anyMatch(enumType -> enumType.name().equalsIgnoreCase(message));
+
+
+            if (validType && validMessage) {
+                check = true;
+            }
+        }
+
+        return check;
     }
 
 }

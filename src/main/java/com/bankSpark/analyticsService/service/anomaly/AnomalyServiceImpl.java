@@ -1,10 +1,13 @@
 package com.bankSpark.analyticsService.service.anomaly;
 
 import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
+import com.bankSpark.analyticsService.ORM.anomaly.AnomalyType;
 import com.bankSpark.analyticsService.repository.AnomalyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +34,11 @@ public class AnomalyServiceImpl implements AnomalyService {
 
     @Override
     public List<Anomaly> getAnomalyByType(String type) {
-        return anomalyRepository.findByType(type);
+
+        boolean existsType = Arrays.stream(AnomalyType.values())
+                .anyMatch(enumType -> enumType.name().equalsIgnoreCase(type));
+
+            return existsType ? anomalyRepository.findByType(type) : Collections.emptyList();
     }
 
     @Override

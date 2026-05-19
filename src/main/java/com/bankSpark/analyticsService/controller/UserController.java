@@ -26,8 +26,8 @@ public class UserController {
         return HttpResponseController.build(userFacade.getAllUsers());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable int id) {
+    @GetMapping("/id")
+    public ResponseEntity<UserDTO> getUserById(@RequestParam int id) {
         return HttpResponseController.buildWithId(userFacade.getUserById(id),id);
     }
 

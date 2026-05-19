@@ -29,8 +29,8 @@ public class SegmentUController {
         return HttpResponseController.build(segmentUFacade.getAllSegments());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<SegmentUserDTO> getSegmentById(@PathVariable int id) {
+    @GetMapping("/id")
+    public ResponseEntity<SegmentUserDTO> getSegmentById(@RequestParam int id) {
         return HttpResponseController.buildWithId(segmentUFacade.getSegmentById(id),id);
     }
 

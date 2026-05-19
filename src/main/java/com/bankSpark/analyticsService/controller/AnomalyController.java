@@ -26,8 +26,8 @@ public class AnomalyController {
         return HttpResponseController.build(anomalyFacade.getAllAnomalies());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<AnomalyDTO> getAnomalyById(@PathVariable int id) {
+    @GetMapping("/id")
+    public ResponseEntity<AnomalyDTO> getAnomalyById(@RequestParam int id) {
         return HttpResponseController.buildWithId(anomalyFacade.getAnomalyById(id),id);
     }
 
