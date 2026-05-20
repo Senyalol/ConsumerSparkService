@@ -74,7 +74,7 @@ public class KafkaConsumerService {
         try {
 
             //Максимум 10 значений сгементов за период
-           if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 9) {
+           if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) <= 4) {
 
                User user = userRepository.findById(recievedSegmentU.getUser_id()).get();
                SegmentUser segmentUser = segmentUMapper.fromKafkaDTOtoEntity(recievedSegmentU,user);
@@ -84,7 +84,7 @@ public class KafkaConsumerService {
 
            }
 
-           else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 9) {
+           else if(segmentURepository.countByUserId(recievedSegmentU.getUser_id()) > 4) {
 
                SegmentUser oldestSegmentUser = segmentURepository.findOldestByUserId(recievedSegmentU.getUser_id()).get();
 

@@ -9,7 +9,7 @@ public class AnomalyDTO {
 
     private Integer userId;
 
-    private Long eventTime;
+    private String eventTime;
 
     private String type;
 

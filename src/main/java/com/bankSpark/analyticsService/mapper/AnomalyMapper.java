@@ -6,6 +6,10 @@ import com.bankSpark.analyticsService.ORM.User;
 import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,7 +29,16 @@ public class AnomalyMapper {
         AnomalyDTO dto = new AnomalyDTO();
         dto.setAnomalyId(anomaly.getId());
         dto.setUserId(anomaly.getUser().getId());
-        dto.setEventTime(anomaly.getEventTime());
+
+        //dto.setEventTime(anomaly.getEventTime());
+        if (anomaly.getEventTime() != null && anomaly.getEventTime() > 0) {
+            dto.setEventTime(
+                    LocalDateTime.ofInstant(
+                            Instant.ofEpochMilli(anomaly.getEventTime()),
+                            ZoneId.systemDefault()
+                    ).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+            );
+        }
         dto.setType(anomaly.getType());
         dto.setSum(anomaly.getSum());
         dto.setAvgCheck(anomaly.getAvgCheck());
