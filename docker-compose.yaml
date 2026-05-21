@@ -17,6 +17,8 @@ services:
       SPRING_KAFKA_CONSUMER_GROUP_ID: analytics-service-group
       SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
       SPRING_KAFKA_CONSUMER_ENABLE_AUTO_COMMIT: "false"
+      #Security
+      SIGNATURE_KEY: P25epMoWb4VgLPm2V20X6z8qJWPbZmEpV97tf4PbH4PHqgtZNR6E0xXONoOEDC7w
     depends_on:
       - postgres-segments
     networks:
