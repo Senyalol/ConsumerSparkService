@@ -45,6 +45,9 @@ logging:
     org.flywaydb: INFO
     org.springframework.boot: INFO
 
+app:
+  signature_key: ${SIGNATURE_KEY}
+
 #spring:
 #  application:
 #    name: analyticsService
