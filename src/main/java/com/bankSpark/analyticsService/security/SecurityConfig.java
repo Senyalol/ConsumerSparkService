@@ -33,6 +33,7 @@ public class SecurityConfig {
         this.jwtFilter = jwtFilter;
     }
 
+    //Свои маппинги
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 

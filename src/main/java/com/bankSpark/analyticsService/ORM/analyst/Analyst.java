@@ -1,6 +1,7 @@
 package com.bankSpark.analyticsService.ORM.analyst;
 
 import com.bankSpark.analyticsService.ORM.inviteToken.InviteToken;
+import com.bankSpark.analyticsService.security.Roles;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,12 +33,12 @@ public class Analyst {
     @Column(name = "password", nullable = false, length = 500)
     private String password;
 
-    @ColumnDefault("'ANALYST'")
+//    @ColumnDefault("'ANALYST'")
     @Column(name = "role", nullable = false, length = 20)
-    private String role;
+    private String role = Roles.ANALYST.name();
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
+//    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
 }
