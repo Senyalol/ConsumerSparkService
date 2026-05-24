@@ -1,14 +1,14 @@
 package com.bankSpark.analyticsService.facade.segments;
 
 import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
+import com.bankSpark.analyticsService.annotation.Facade;
 import com.bankSpark.analyticsService.mapper.SegmentUMapper;
 import com.bankSpark.analyticsService.service.segments.SegmentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Facade
 public class SegmentUFacadeImpl implements SegmentUFacade {
 
     private final SegmentService segmentService;

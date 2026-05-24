@@ -2,15 +2,15 @@ package com.bankSpark.analyticsService.facade.inviteToken;
 
 import com.bankSpark.analyticsService.DTO.inviteTokenDTO.FullTokenInfoDTO;
 import com.bankSpark.analyticsService.DTO.inviteTokenDTO.TokenResponseDTO;
+import com.bankSpark.analyticsService.annotation.Facade;
 import com.bankSpark.analyticsService.exception.GenerateKeyException;
 import com.bankSpark.analyticsService.mapper.InviteTokenMapper;
 import com.bankSpark.analyticsService.security.randomKeyAPI.InviteTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Facade
 public class InviteTokenFacadeImpl implements InviteTokenFacade {
 
     private final InviteTokenService inviteTokenService;

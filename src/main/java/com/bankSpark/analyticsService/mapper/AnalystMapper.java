@@ -2,9 +2,9 @@ package com.bankSpark.analyticsService.mapper;
 
 import com.bankSpark.analyticsService.DTO.analyst.AnalystInfoDTO;
 import com.bankSpark.analyticsService.ORM.analyst.Analyst;
-import org.springframework.stereotype.Component;
+import com.bankSpark.analyticsService.annotation.Mapper;
 
-@Component
+@Mapper
 public class AnalystMapper {
 
     //Из сущности в DTO

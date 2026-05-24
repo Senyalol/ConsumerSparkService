@@ -2,12 +2,12 @@ package com.bankSpark.analyticsService.mapper;
 
 import com.bankSpark.analyticsService.DTO.UserDTO;
 import com.bankSpark.analyticsService.ORM.User;
-import org.springframework.stereotype.Component;
+import com.bankSpark.analyticsService.annotation.Mapper;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Mapper
 public class UserMapper {
 
     //Из сущности в DTO

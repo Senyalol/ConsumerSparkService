@@ -1,14 +1,14 @@
 package com.bankSpark.analyticsService.facade.users;
 
 import com.bankSpark.analyticsService.DTO.UserDTO;
+import com.bankSpark.analyticsService.annotation.Facade;
 import com.bankSpark.analyticsService.mapper.UserMapper;
 import com.bankSpark.analyticsService.service.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Facade
 public class UserFacadeImpl implements UserFacade {
 
     private final UserService userService;

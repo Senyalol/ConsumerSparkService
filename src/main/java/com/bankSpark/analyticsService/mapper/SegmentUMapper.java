@@ -4,13 +4,13 @@ import com.bankSpark.analyticsService.DTO.segmentsRFM.KafkaSegmentUserDTO;
 import com.bankSpark.analyticsService.DTO.segmentsRFM.SegmentUserDTO;
 import com.bankSpark.analyticsService.ORM.User;
 import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
-import org.springframework.stereotype.Component;
+import com.bankSpark.analyticsService.annotation.Mapper;
 
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Mapper
 public class SegmentUMapper {
 
 

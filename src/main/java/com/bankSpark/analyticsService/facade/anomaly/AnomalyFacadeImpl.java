@@ -1,14 +1,14 @@
 package com.bankSpark.analyticsService.facade.anomaly;
 
 import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
+import com.bankSpark.analyticsService.annotation.Facade;
 import com.bankSpark.analyticsService.mapper.AnomalyMapper;
 import com.bankSpark.analyticsService.service.anomaly.AnomalyService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Component
+@Facade
 public class AnomalyFacadeImpl implements AnomalyFacade {
 
     private final AnomalyService anomalyService;

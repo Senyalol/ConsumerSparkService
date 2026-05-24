@@ -4,7 +4,7 @@ import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 import com.bankSpark.analyticsService.DTO.anomaly.KafkaAnomalyDTO;
 import com.bankSpark.analyticsService.ORM.User;
 import com.bankSpark.analyticsService.ORM.anomaly.Anomaly;
-import org.springframework.stereotype.Component;
+import com.bankSpark.analyticsService.annotation.Mapper;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -13,15 +13,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
+@Mapper
 public class AnomalyMapper {
-
-//    private final UserRepository userRepository;
-//
-//    @Autowired
-//    public AnomalyMapper(UserRepository userRepository) {
-//        this.userRepository = userRepository;
-//    }
 
     //Из сущности в DTO
     public AnomalyDTO toDTO(Anomaly anomaly) {
