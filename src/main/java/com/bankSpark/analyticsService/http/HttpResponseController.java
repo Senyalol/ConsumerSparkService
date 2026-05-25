@@ -1,9 +1,13 @@
 package com.bankSpark.analyticsService.http;
 
 import com.bankSpark.analyticsService.ORM.segment.SEGMENTS;
+import com.bankSpark.analyticsService.security.Roles;
 import org.springframework.http.ResponseEntity;
 
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class HttpResponseController {
 
@@ -20,6 +24,25 @@ public class HttpResponseController {
         return ResponseEntity.ok(data);
     }
 
+    public static <T>ResponseEntity<T> buildWithRoles(T data, String role){
+
+        if(!isValidRole(role)){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return build(data);
+    }
+
+    //Проверка для дат
+    //Позже даты
+    public static <T>ResponseEntity<T> buildWithDate(T data, LocalDateTime afterDate){
+
+        if(!isValidDate(afterDate)){
+            return ResponseEntity.badRequest().build();
+        }
+        return build(data);
+    }
+
     //Проверка для Id
     public static <T>ResponseEntity<T> buildWithId(T data, int id) {
 
@@ -28,6 +51,22 @@ public class HttpResponseController {
         }
 
         return build(data);
+
+    }
+
+    //Проверка id для удаления
+    public static ResponseEntity<?> buildWithId(int id){
+
+        if(!isIdValid(id)){
+            return ResponseEntity.badRequest().build();
+        }
+
+        return ResponseEntity
+                .ok()
+                .body(Map.of(
+                        "message", "Analyst deleted successfully",
+                        "analystId", id
+                ));
 
     }
 
@@ -141,6 +180,25 @@ public class HttpResponseController {
         if(!isValidString(segment)) return false;
         for(SEGMENTS s : SEGMENTS.values()) {
             if(s.name().equals(segment)) return true;
+        }
+        return false;
+    }
+
+    private static boolean isValidRole(String role){
+
+        if(role != null && !role.isBlank()) {
+
+            return Arrays.stream(Roles.values())
+                    .anyMatch(r -> r.name().equals(role));
+        }
+
+        return false;
+    }
+
+    private static boolean isValidDate(LocalDateTime dateTime){
+
+        if(dateTime != null){
+            return  true;
         }
         return false;
     }

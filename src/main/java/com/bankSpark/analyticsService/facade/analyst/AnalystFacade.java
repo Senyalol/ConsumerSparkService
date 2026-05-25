@@ -7,7 +7,6 @@ import com.bankSpark.analyticsService.DTO.analyst.UpdateAnalystDTO;
 import com.bankSpark.analyticsService.security.sDTO.JwtAuthenticationDTO;
 import com.bankSpark.analyticsService.security.sDTO.JwtTokenDTO;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;
 

@@ -1,20 +1,28 @@
 package com.bankSpark.analyticsService.security.analystService;
 
 import com.bankSpark.analyticsService.DTO.analyst.AnalystInfoDTO;
+import com.bankSpark.analyticsService.DTO.analyst.AuthAnalystDTO;
 import com.bankSpark.analyticsService.DTO.analyst.CreateAnalystDTO;
 import com.bankSpark.analyticsService.DTO.analyst.UpdateAnalystDTO;
 import com.bankSpark.analyticsService.ORM.analyst.Analyst;
+import com.bankSpark.analyticsService.ORM.inviteToken.InviteToken;
 import com.bankSpark.analyticsService.exception.CreateAnalystException;
 import com.bankSpark.analyticsService.exception.UpdateAnalystException;
 import com.bankSpark.analyticsService.mapper.AnalystMapper;
 import com.bankSpark.analyticsService.repository.AnalystRepository;
 import com.bankSpark.analyticsService.repository.InviteTokenRepository;
+import com.bankSpark.analyticsService.security.JWTService;
 import com.bankSpark.analyticsService.security.analystService.createChecks.*;
 import com.bankSpark.analyticsService.security.analystService.updateChecks.*;
+import com.bankSpark.analyticsService.security.sDTO.JwtAuthenticationDTO;
+import com.bankSpark.analyticsService.security.sDTO.JwtTokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.Instant;
 import java.util.Arrays;
@@ -26,15 +34,20 @@ public class AnalystServiceImpl implements AnalystService {
     private final AnalystRepository analystRepository;
     private final AnalystMapper analystMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JWTService jwtService;
 
     private final InviteTokenRepository tokenRepository;
 
+    private static final Logger LOGGER = LogManager.getLogger(AnalystServiceImpl.class);
+
+
     @Autowired
-    public AnalystServiceImpl(AnalystRepository analystRepository, AnalystMapper analystMapper, InviteTokenRepository tokenRepository, PasswordEncoder passwordEncoder) {
+    public AnalystServiceImpl(AnalystRepository analystRepository, AnalystMapper analystMapper, InviteTokenRepository tokenRepository, PasswordEncoder passwordEncoder,JWTService jwtService) {
         this.analystRepository = analystRepository;
         this.analystMapper = analystMapper;
         this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Transactional
@@ -136,6 +149,74 @@ public class AnalystServiceImpl implements AnalystService {
     @Override
     public void deleteAnalyst(int id) {
         analystRepository.deleteById(id);
+    }
+
+    //Методы для фасада
+
+    @Override
+    public JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO) {
+
+        Analyst certainAnalyst = analystRepository.getAnalystByLogin(authDTO.getLogin()).get();
+
+        InviteToken analystToken = tokenRepository.findByToken(authDTO.getToken()).get();
+
+        JwtAuthenticationDTO jwtDTO = new JwtAuthenticationDTO();
+        jwtDTO.setToken("Error authentication");
+        jwtDTO.setRefreshToken("Error refresh token");
+
+        if(authDTO.getLogin() != null
+                && authDTO.getPassword() != null
+                && analystRepository.getAnalystByLogin(authDTO.getLogin()).isPresent()
+                && certainAnalyst.getToken().equals(analystToken)){
+
+            if(passwordEncoder.matches(authDTO.getPassword(),certainAnalyst.getPassword())){
+
+                System.out.printf("%d User %s successfully authenticated",certainAnalyst.getId(),certainAnalyst.getLogin());
+                jwtService.getTokenAnalyst(authDTO.getLogin());
+            }
+            else{
+                System.err.println("Incorrect login , password or token");
+            }
+
+        }
+
+        else{
+            System.err.printf("Analyst with login - %s not found",authDTO.getLogin());
+        }
+
+        return jwtDTO;
+    }
+
+    @Override
+    public JwtTokenDTO getOut(String token) {
+
+        try{
+
+            Analyst exitAnalyst = analystRepository.getAnalystByLogin(jwtService.getLoginFromToken(token)).get();
+
+            String login = exitAnalyst.getLogin();
+
+            String deadToken = jwtService.getOutFromAccount(login).getToken();
+            JwtTokenDTO deadTokenDTO = new JwtTokenDTO();
+            deadTokenDTO.setToken(deadToken);
+            return deadTokenDTO;
+
+        }
+        catch (Exception e){
+            LOGGER.error(e.getMessage());
+            throw new RuntimeException();
+        }
+
+    }
+
+    @Override
+    public Analyst analystFromToken(String jwt) {
+
+//        JwtTokenDTO jwtTokenDTO = new JwtTokenDTO();
+//        jwtTokenDTO.setToken(jwt);
+        String login = jwtService.getLoginFromToken(jwt);
+
+        return analystRepository.getAnalystByLogin(login).get();
     }
 
 }

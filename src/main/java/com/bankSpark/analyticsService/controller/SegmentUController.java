@@ -5,12 +5,11 @@ import com.bankSpark.analyticsService.facade.segments.SegmentUFacade;
 import com.bankSpark.analyticsService.http.HttpResponseController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//Cors
-//ResponseEntity
 
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
 @RestController
@@ -24,22 +23,26 @@ public class SegmentUController {
         this.segmentUFacade = segmentUFacade;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping
     public ResponseEntity<List<SegmentUserDTO>> getAllSegments() {
         return HttpResponseController.build(segmentUFacade.getAllSegments());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/id")
     public ResponseEntity<SegmentUserDTO> getSegmentById(@RequestParam int id) {
         return HttpResponseController.buildWithId(segmentUFacade.getSegmentById(id),id);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/user")
     public ResponseEntity<List<SegmentUserDTO>> getSegmentsByUserId(@RequestParam int userId) {
         return HttpResponseController.buildWithId(segmentUFacade.getSegmentsByUser(userId),userId);
     }
 
     //Проверить , написать тесты
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/username")
     public ResponseEntity<List<SegmentUserDTO>> getSegmentsByUsername(@RequestParam String lastname, @RequestParam(required = false) String name) {
 
@@ -60,6 +63,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithStringValue(segmentUFacade.getSegmentsByUser(name, lastname),lastname,name);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/type")
     public ResponseEntity<List<SegmentUserDTO>> getSegmentsBySegmentId(@RequestParam String segment) {
 
@@ -71,6 +75,7 @@ public class SegmentUController {
     }
 
     //Названия маппингов
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/R/more")
     public ResponseEntity<List<SegmentUserDTO>> getRMoreSegments(@RequestParam Double R) {
 
@@ -81,6 +86,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByRMore(R),R);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/R/less")
     public ResponseEntity<List<SegmentUserDTO>> getRLessSegments(@RequestParam Double R) {
 
@@ -91,6 +97,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByRLess(R),R);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/R/range")
     public ResponseEntity<List<SegmentUserDTO>> getRRangeSegments(@RequestParam Double min, @RequestParam Double max) {
 
@@ -101,6 +108,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithRange(segmentUFacade.getSegmentsByRRange(min, max),min,max);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/F/more")
     public ResponseEntity<List<SegmentUserDTO>> getFMoreSegments(@RequestParam Long F) {
 
@@ -111,6 +119,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByFMore(F),F);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/F/less")
     public ResponseEntity<List<SegmentUserDTO>> getFLessSegments(@RequestParam Long F) {
 
@@ -121,6 +130,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByFLess(F),F);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/F/range")
     public ResponseEntity<List<SegmentUserDTO>> getFRangeSegments(@RequestParam Long min, @RequestParam Long max) {
 
@@ -131,6 +141,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithRange(segmentUFacade.getSegmentsByFRange(min, max),min,max);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/M/more")
     public ResponseEntity<List<SegmentUserDTO>> getMMoreSegments(@RequestParam Double M) {
 
@@ -141,6 +152,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByMMore(M),M);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/M/less")
     public ResponseEntity<List<SegmentUserDTO>> getMLessSegments(@RequestParam Double M) {
 
@@ -151,6 +163,7 @@ public class SegmentUController {
         return HttpResponseController.buildWithPositiveValue(segmentUFacade.getSegmentsByMLess(M),M);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
     @GetMapping("/M/range")
     public ResponseEntity<List<SegmentUserDTO>> getMRangeSegments(@RequestParam Double min, @RequestParam Double max) {
 

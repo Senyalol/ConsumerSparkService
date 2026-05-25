@@ -3,6 +3,10 @@ package com.bankSpark.analyticsService.security.analystService;
 import com.bankSpark.analyticsService.DTO.analyst.AnalystInfoDTO;
 import com.bankSpark.analyticsService.DTO.analyst.CreateAnalystDTO;
 import com.bankSpark.analyticsService.DTO.analyst.UpdateAnalystDTO;
+import com.bankSpark.analyticsService.ORM.analyst.Analyst;
+import com.bankSpark.analyticsService.security.sDTO.JwtTokenDTO;
+import com.bankSpark.analyticsService.security.sDTO.JwtAuthenticationDTO;
+import com.bankSpark.analyticsService.DTO.analyst.AuthAnalystDTO;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,5 +36,13 @@ public interface AnalystService {
     AnalystInfoDTO updateAnalyst(int id, UpdateAnalystDTO updateAnalystDTO);
 
     void deleteAnalyst(int id);
+
+    JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO);
+//
+//    //Выйти из аккаунта
+    JwtTokenDTO getOut(String token);
+//
+//    //Достать аналитика из токена
+    Analyst analystFromToken(String jwt);
 
 }

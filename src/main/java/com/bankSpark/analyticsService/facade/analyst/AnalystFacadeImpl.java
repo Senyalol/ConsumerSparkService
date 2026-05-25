@@ -6,7 +6,6 @@ import com.bankSpark.analyticsService.DTO.analyst.CreateAnalystDTO;
 import com.bankSpark.analyticsService.DTO.analyst.UpdateAnalystDTO;
 import com.bankSpark.analyticsService.annotation.Facade;
 import com.bankSpark.analyticsService.mapper.AnalystMapper;
-import com.bankSpark.analyticsService.security.JWTService;
 import com.bankSpark.analyticsService.security.analystService.AnalystService;
 import com.bankSpark.analyticsService.security.sDTO.JwtAuthenticationDTO;
 import com.bankSpark.analyticsService.security.sDTO.JwtTokenDTO;
@@ -20,13 +19,11 @@ import java.util.List;
 @Facade
 public class AnalystFacadeImpl implements AnalystFacade {
 
-    private final JWTService jwtService;
     private final AnalystService analystService;
     private final AnalystMapper analystMapper;
 
     @Autowired
-    public AnalystFacadeImpl(JWTService jwtService, AnalystService analystService,AnalystMapper analystMapper) {
-        this.jwtService = jwtService;
+    public AnalystFacadeImpl(AnalystService analystService,AnalystMapper analystMapper) {
         this.analystService = analystService;
         this.analystMapper = analystMapper;
     }
@@ -80,7 +77,7 @@ public class AnalystFacadeImpl implements AnalystFacade {
 
     @Override
     public JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO) {
-        return jwtService.signIn(authDTO);
+        return analystService.signIn(authDTO);
     }
 
     @Override
@@ -88,15 +85,15 @@ public class AnalystFacadeImpl implements AnalystFacade {
 
         String trueToken = getPayLoadToken(token);
 
-        return jwtService.getOut(trueToken);
+        return analystService.getOut(trueToken);
     }
 
     @Override
     public AnalystInfoDTO analystFromToken(String jwt) {
 
         String trueToken = getPayLoadToken(jwt);
-        
-        return analystMapper.toFullInfoDTO(jwtService.analystFromToken(trueToken));
+
+        return analystMapper.toFullInfoDTO(analystService.analystFromToken(trueToken));
     }
 
     //Получить часть токена с полезной информацией

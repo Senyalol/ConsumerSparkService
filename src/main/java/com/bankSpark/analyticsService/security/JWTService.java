@@ -1,9 +1,6 @@
 package com.bankSpark.analyticsService.security;
 
-import com.bankSpark.analyticsService.ORM.analyst.Analyst;
-import com.bankSpark.analyticsService.DTO.analyst.AuthAnalystDTO;
 import com.bankSpark.analyticsService.security.sDTO.JwtAuthenticationDTO;
-import com.bankSpark.analyticsService.security.sDTO.JwtTokenDTO;
 
 public interface JWTService{
 
@@ -19,13 +16,17 @@ public interface JWTService{
 
     JwtAuthenticationDTO getOutFromAccount(String login);
 
-    //Войти в аккаунт
-    JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO);
+    String getRoleAnalyst(String login);
 
-    //Выйти из аккаунта
-    JwtTokenDTO getOut(String token);
+    String getTokenAnalyst(String login);
 
-    //Достать аналитика из токена
-    Analyst analystFromToken(String jwt);
+//    //Войти в аккаунт
+//    JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO);
+//
+//    //Выйти из аккаунта
+//    JwtTokenDTO getOut(String token);
+//
+//    //Достать аналитика из токена
+//    Analyst analystFromToken(String jwt);
 
 }
