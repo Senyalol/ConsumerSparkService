@@ -71,6 +71,10 @@ public class AnalystServiceImpl implements AnalystService {
             newAnalyst.setPassword(passwordEncoder.encode(createAnalystDTO.getPassword()));
             analystRepository.save(newAnalyst);
 
+            InviteToken inviteToken = tokenRepository.findByToken(createAnalystDTO.getToken()).get();
+            inviteToken.setUsed(true);
+            tokenRepository.save(inviteToken);
+
             return analystMapper.toFullInfoDTO(analystRepository.getAnalystByLogin(createAnalystDTO.getLogin()).get());
         }
 
@@ -172,7 +176,8 @@ public class AnalystServiceImpl implements AnalystService {
             if(passwordEncoder.matches(authDTO.getPassword(),certainAnalyst.getPassword())){
 
                 System.out.printf("%d User %s successfully authenticated",certainAnalyst.getId(),certainAnalyst.getLogin());
-                jwtService.getTokenAnalyst(authDTO.getLogin());
+                return  jwtService.getTokenForAnalyst(authDTO.getLogin());
+
             }
             else{
                 System.err.println("Incorrect login , password or token");

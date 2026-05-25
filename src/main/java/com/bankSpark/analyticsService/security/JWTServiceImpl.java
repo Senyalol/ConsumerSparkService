@@ -113,7 +113,7 @@ public class JWTServiceImpl implements JWTService {
 
     //Метод при прохождении аутентификации которого - пользователь получает токен
     @Override
-    public JwtAuthenticationDTO getTokenForUser(String login) {
+    public JwtAuthenticationDTO getTokenForAnalyst(String login) {
 
         String password = analystRepository.getAnalystByLogin(login).get().getPassword();
         String role = getRoleAnalyst(login);

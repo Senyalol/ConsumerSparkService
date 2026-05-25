@@ -8,7 +8,7 @@ public interface JWTService{
 
     String generateJwtToken(String login, String role, String password,String token);
 
-    JwtAuthenticationDTO getTokenForUser(String login);
+    JwtAuthenticationDTO getTokenForAnalyst(String login);
 
     JwtAuthenticationDTO generateRefreshToken(String login, String refreshToken);
 

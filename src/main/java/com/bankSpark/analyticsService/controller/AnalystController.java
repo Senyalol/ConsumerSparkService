@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
 @RestController
 @RequestMapping("/api/analyst")
 public class AnalystController {
@@ -63,7 +64,7 @@ public class AnalystController {
         return HttpResponseController.buildWithStringValue(analystFacade.getAnalystByLogin(login),login);
     }
 
-    @PostMapping
+    @PostMapping("/reg")
     public ResponseEntity<AnalystInfoDTO> addAnalyst(@RequestBody CreateAnalystDTO newAnalyst) {
         return HttpResponseController.build(analystFacade.createAnalyst(newAnalyst));
     }
