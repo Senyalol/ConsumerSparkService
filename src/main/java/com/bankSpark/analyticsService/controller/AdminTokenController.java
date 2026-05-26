@@ -15,7 +15,6 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
 @RestController
 @RequestMapping("/admin/tokens")
-@PreAuthorize("hasRole('ADMIN')")
 public class AdminTokenController {
 
     private final InviteTokenFacade inviteTokenFacade;
@@ -25,16 +24,19 @@ public class AdminTokenController {
         this.inviteTokenFacade = inviteTokenFacade;
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     public ResponseEntity<List<FullTokenInfoDTO>> getAllTokens() {
         return HttpResponseController.build(inviteTokenFacade.getAllInviteTokens());
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/used")
     public ResponseEntity<List<FullTokenInfoDTO>> getUsedTokens(@RequestParam Boolean used) {
         return HttpResponseController.build(inviteTokenFacade.getAllInviteTokensByUsed(used));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/generate")
     public ResponseEntity<TokenResponseDTO> generateToken(@RequestBody(required = false) GenerateTokenRequestDTO request) {
 
@@ -48,6 +50,7 @@ public class AdminTokenController {
     /**
      * Генерация токена с параметрами по умолчанию
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/generate/default")
     public ResponseEntity<TokenResponseDTO> generateDefaultToken() {
         TokenResponseDTO response = inviteTokenFacade.generateDefaultToken();
@@ -57,6 +60,7 @@ public class AdminTokenController {
     /**
      * Проверка валидности токена
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/validate")
     public ResponseEntity<Boolean> validateToken(@RequestParam String token) {
         boolean isValid = inviteTokenFacade.isValidToken(token);
@@ -66,6 +70,7 @@ public class AdminTokenController {
     /**
      * Отмена токена
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/revoke")
     public ResponseEntity<String> revokeToken(@RequestParam String token) {
         inviteTokenFacade.revokeToken(token);
@@ -75,11 +80,13 @@ public class AdminTokenController {
     /**
      * Информация о токене
      */
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/info")
     public ResponseEntity<?> getTokenInfo(@RequestParam String token) {
         return ResponseEntity.ok(inviteTokenFacade.getTokenInfo(token));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/expired")
     public ResponseEntity<Integer> cleanupExpiredTokens(){
         return ResponseEntity.ok(inviteTokenFacade.cleanupExpiredTokens());
