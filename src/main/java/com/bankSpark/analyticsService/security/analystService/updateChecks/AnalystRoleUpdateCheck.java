@@ -7,7 +7,12 @@ import com.bankSpark.analyticsService.security.Roles;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AnalystRoleUpdateCheck implements AnalystUpdateCheck{
+
+    private static final Logger LOGGER = LogManager.getLogger(AnalystRoleUpdateCheck.class);
 
     private static final List<Roles> roles = Arrays.stream(Roles.values()).toList();
 
@@ -19,7 +24,10 @@ public class AnalystRoleUpdateCheck implements AnalystUpdateCheck{
                 && !newAnalystData.getRole().isBlank()) {
 
             if(roles.contains(newAnalystData.getRole())){
+
+                String oldRole = oldAnalystData.getRole();
                 oldAnalystData.setRole(newAnalystData.getRole());
+                LOGGER.info("Analyst - {} Role was updated from - {} to - {}",oldAnalystData.getLogin(),oldRole,newAnalystData.getRole());
             }
 
             else{

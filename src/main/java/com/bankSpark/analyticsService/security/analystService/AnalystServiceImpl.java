@@ -74,6 +74,7 @@ public class AnalystServiceImpl implements AnalystService {
             InviteToken inviteToken = tokenRepository.findByToken(createAnalystDTO.getToken()).get();
             inviteToken.setUsed(true);
             tokenRepository.save(inviteToken);
+            LOGGER.info("Analyst - {} , was created", newAnalyst.getLogin());
 
             return analystMapper.toFullInfoDTO(analystRepository.getAnalystByLogin(createAnalystDTO.getLogin()).get());
         }
@@ -140,7 +141,7 @@ public class AnalystServiceImpl implements AnalystService {
         try{
 
             analystUpdateCheck.updateChecks(oldAnalyst, updateAnalystDTO);
-
+            LOGGER.info("Analyst - {} was updated",oldAnalyst.getLogin());
         }
         catch (Exception e){
             throw new UpdateAnalystException();
@@ -152,11 +153,12 @@ public class AnalystServiceImpl implements AnalystService {
     @Transactional
     @Override
     public void deleteAnalyst(int id) {
+        String deletedLogin = analystRepository.findById(id).get().getLogin();
         analystRepository.deleteById(id);
+        LOGGER.info("Analyst - {} was deleted",deletedLogin);
     }
 
     //Методы для фасада
-
     @Override
     public JwtAuthenticationDTO signIn(AuthAnalystDTO authDTO) {
 
@@ -175,18 +177,18 @@ public class AnalystServiceImpl implements AnalystService {
 
             if(passwordEncoder.matches(authDTO.getPassword(),certainAnalyst.getPassword())){
 
-                System.out.printf("%d User %s successfully authenticated",certainAnalyst.getId(),certainAnalyst.getLogin());
+                LOGGER.info("{} User {} successfully authenticated",certainAnalyst.getId(),certainAnalyst.getLogin());
                 return  jwtService.getTokenForAnalyst(authDTO.getLogin());
 
             }
             else{
-                System.err.println("Incorrect login , password or token");
+                LOGGER.error("Incorrect login , password or token");
             }
 
         }
 
         else{
-            System.err.printf("Analyst with login - %s not found",authDTO.getLogin());
+            LOGGER.error("Analyst with login - {} not found",authDTO.getLogin());
         }
 
         return jwtDTO;

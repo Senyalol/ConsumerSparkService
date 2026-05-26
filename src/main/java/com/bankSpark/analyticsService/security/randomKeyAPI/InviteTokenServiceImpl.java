@@ -31,7 +31,7 @@ public class InviteTokenServiceImpl implements InviteTokenService {
         this.inviteTokenRepository = inviteTokenRepository;
     }
 
-    private static final int DEFAULT_HOURS_VALID = 72;  // 24 часа
+    private static final int DEFAULT_HOURS_VALID = 72;
     private static final String DEFAULT_ROLE = Roles.ANALYST.name();
 
     @Transactional

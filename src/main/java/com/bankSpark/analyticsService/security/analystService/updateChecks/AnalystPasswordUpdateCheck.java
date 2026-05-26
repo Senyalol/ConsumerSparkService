@@ -4,7 +4,12 @@ import com.bankSpark.analyticsService.DTO.analyst.UpdateAnalystDTO;
 import com.bankSpark.analyticsService.ORM.analyst.Analyst;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class AnalystPasswordUpdateCheck implements AnalystUpdateCheck{
+
+    private static final Logger LOGGER = LogManager.getLogger(AnalystPasswordUpdateCheck.class);
 
     private PasswordEncoder passwordEncoder;
 
@@ -20,7 +25,7 @@ public class AnalystPasswordUpdateCheck implements AnalystUpdateCheck{
                 && !newAnalystData.getPassword().isBlank()){
 
             oldAnalystData.setPassword(passwordEncoder.encode(newAnalystData.getPassword()));
-
+            LOGGER.info("Analyst password was updated for user - {} ",newAnalystData.getLogin());
         }
 
     }
