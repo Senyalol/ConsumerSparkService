@@ -60,7 +60,8 @@ class SegmentUMapperTest {
             assertEquals(100, result.getUSegmentId());
             assertEquals(1, result.getUserId());
             assertEquals("VIP", result.getSegment());
-            assertEquals(1.5, result.getRMinutes());
+            // rMinutes теперь String, проверяем как строку
+            assertEquals("1.5", result.getRMinutes());
             assertEquals(10L, result.getF());
             assertEquals(5000.0, result.getM());
             assertNotNull(result.getUpdatedAt());
@@ -71,6 +72,48 @@ class SegmentUMapperTest {
         void shouldHandleNullSegmentUser() {
             // when & then
             assertThrows(NullPointerException.class, () -> segmentUMapper.toDTO(null));
+        }
+
+        @Test
+        @DisplayName("Should handle null rMinutes in segment user")
+        void shouldHandleNullRMinutes() {
+            // given
+            testSegmentUser.setRMinutes(null);
+
+            // when
+            SegmentUserDTO result = segmentUMapper.toDTO(testSegmentUser);
+
+            // then
+            assertNotNull(result);
+            assertEquals("0", result.getRMinutes());
+        }
+
+        @Test
+        @DisplayName("Should format rMinutes with 2 decimal places")
+        void shouldFormatRMinutesWithTwoDecimals() {
+            // given
+            testSegmentUser.setRMinutes(1.5666666666666667);
+
+            // when
+            SegmentUserDTO result = segmentUMapper.toDTO(testSegmentUser);
+
+            // then
+            assertNotNull(result);
+            assertEquals("1.57", result.getRMinutes());
+        }
+
+        @Test
+        @DisplayName("Should format integer rMinutes without decimal places")
+        void shouldFormatIntegerRMinutesWithoutDecimals() {
+            // given
+            testSegmentUser.setRMinutes(5.0);
+
+            // when
+            SegmentUserDTO result = segmentUMapper.toDTO(testSegmentUser);
+
+            // then
+            assertNotNull(result);
+            assertEquals("5", result.getRMinutes());
         }
     }
 
@@ -92,6 +135,7 @@ class SegmentUMapperTest {
             assertEquals(1, result.size());
             assertEquals(100, result.get(0).getUSegmentId());
             assertEquals("VIP", result.get(0).getSegment());
+            assertEquals("1.5", result.get(0).getRMinutes());
         }
 
         @Test

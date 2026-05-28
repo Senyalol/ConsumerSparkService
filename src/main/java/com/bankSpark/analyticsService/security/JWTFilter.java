@@ -7,6 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,7 +34,7 @@ public class JWTFilter extends OncePerRequestFilter {
     );
 
     @Autowired
-    public JWTFilter(JWTService jwtService,CustomUserDetailsServiceImpl customUserDetailsService) {
+    public JWTFilter(JWTService jwtService, CustomUserDetailsServiceImpl customUserDetailsService) {
         this.jwtService = jwtService;
         this.customUserDetailsService = customUserDetailsService;
     }
@@ -70,13 +72,26 @@ public class JWTFilter extends OncePerRequestFilter {
 
     }
 
-    // Метод устанавливает пользователя токен с данными в контекст безопасности
     public void setUserDetailsToSecurityContextHolder(String jwtToken){
         String login = jwtService.getLoginFromToken(jwtToken);
         CustomUserDetails customUserDetails = customUserDetailsService.loadUserByUsername(login);
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
     }
+
+
+    // Метод устанавливает пользователя токен с данными в контекст безопасности
+//    public void setUserDetailsToSecurityContextHolder(String jwtToken){
+//        String login = jwtService.getLoginFromToken(jwtToken);
+//        String role = jwtService.getRoleFromToken(jwtToken);
+//
+//        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(role));
+//
+//        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(customUserDetails, null, customUserDetails.getAuthorities());
+////        UsernamePasswordAuthenticationToken authenticationToken =
+////                new UsernamePasswordAuthenticationToken(login, null, authorities);
+//        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+//    }
 
 
     // Получит токен из запроса

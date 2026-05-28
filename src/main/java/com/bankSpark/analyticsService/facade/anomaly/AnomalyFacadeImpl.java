@@ -66,6 +66,11 @@ public class AnomalyFacadeImpl implements AnomalyFacade {
     }
 
     @Override
+    public List<AnomalyDTO> getAnomaliesByAvgCheckLess(Double avgCheckLess) {
+        return anomalyMapper.toListDTO(anomalyService.getAnomaliesByAvgCheckLess(avgCheckLess));
+    }
+
+    @Override
     public List<AnomalyDTO> getAnomaliesByAvgCheck(Double avgCheck) {
         return anomalyMapper.toListDTO(anomalyService.getAnomaliesByAvgCheck(avgCheck));
     }

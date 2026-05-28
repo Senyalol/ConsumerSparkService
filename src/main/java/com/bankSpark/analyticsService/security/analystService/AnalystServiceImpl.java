@@ -84,6 +84,13 @@ public class AnalystServiceImpl implements AnalystService {
     }
 
     @Override
+    public int getIdByLogin(String login) {
+        return login != null && analystRepository.getAnalystByLogin(login).isPresent()
+                ? analystRepository.getAnalystByLogin(login).get().getId()
+                : 0;
+    }
+
+    @Override
     public List<AnalystInfoDTO> getAnalysts() {
         return analystRepository.findAll().stream()
                 .map(x -> analystMapper.toFullInfoDTO(x))

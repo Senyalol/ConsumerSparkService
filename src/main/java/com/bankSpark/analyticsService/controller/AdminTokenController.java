@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173"})
 @RestController
 @RequestMapping("/admin/tokens")
 public class AdminTokenController {
@@ -57,6 +57,7 @@ public class AdminTokenController {
         return ResponseEntity.ok(response);
     }
 
+    //не используй во фронте
     /**
      * Проверка валидности токена
      */
@@ -77,6 +78,7 @@ public class AdminTokenController {
         return ResponseEntity.ok("Token revoked: " + token);
     }
 
+    //Не используй во фронте
     /**
      * Информация о токене
      */
@@ -86,6 +88,7 @@ public class AdminTokenController {
         return ResponseEntity.ok(inviteTokenFacade.getTokenInfo(token));
     }
 
+    //Не используй во фронте
     @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/expired")
     public ResponseEntity<Integer> cleanupExpiredTokens(){

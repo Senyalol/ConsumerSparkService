@@ -11,7 +11,8 @@ public class SegmentUserDTO {
 
     private String segment;
 
-    private Double rMinutes;
+    private String rMinutes;  // ← был Double, стал String
+//    private Double rMinutes;
 
     private Long f;
 

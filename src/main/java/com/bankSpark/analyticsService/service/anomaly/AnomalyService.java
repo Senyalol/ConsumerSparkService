@@ -28,6 +28,8 @@ public interface AnomalyService {
     //Все аномалии до определенного времени
     List<Anomaly> getAnomaliesByMinEventTime(Long minTime);
 
+    List<Anomaly> getAnomaliesByAvgCheckLess(Double avgCheckLess);
+
     //Все аномалии после определенного времени
     List<Anomaly> getAnomaliesByMaxEventTime(Long maxTime);
 

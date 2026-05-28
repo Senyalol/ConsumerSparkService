@@ -40,7 +40,7 @@ class SegmentUControllerTest {
         testSegmentDTO1.setUSegmentId(1);
         testSegmentDTO1.setUserId(1);
         testSegmentDTO1.setSegment("VIP");
-        testSegmentDTO1.setRMinutes(1.5);
+        testSegmentDTO1.setRMinutes("1.5");     // ← ИСПРАВЛЕНО: String
         testSegmentDTO1.setF(10L);
         testSegmentDTO1.setM(5000.0);
 
@@ -48,7 +48,7 @@ class SegmentUControllerTest {
         testSegmentDTO2.setUSegmentId(2);
         testSegmentDTO2.setUserId(2);
         testSegmentDTO2.setSegment("Active");
-        testSegmentDTO2.setRMinutes(5.0);
+        testSegmentDTO2.setRMinutes("5.0");     // ← ИСПРАВЛЕНО: String
         testSegmentDTO2.setF(5L);
         testSegmentDTO2.setM(2000.0);
     }

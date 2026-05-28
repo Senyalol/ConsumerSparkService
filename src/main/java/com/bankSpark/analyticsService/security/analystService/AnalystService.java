@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface AnalystService {
 
+    //Получить id по login аналитика
+    int getIdByLogin(String login);
+
     //Получить всех аналитиков
     List<AnalystInfoDTO> getAnalysts();
 

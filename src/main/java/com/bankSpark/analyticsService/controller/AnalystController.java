@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173"})
 @RestController
 @RequestMapping("/api/analyst")
 public class AnalystController {
@@ -40,12 +40,14 @@ public class AnalystController {
         return HttpResponseController.buildWithRoles(analystFacade.getAnalystsByRole(role),role);
     }
 
+    //Не используй во фронте
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/date/after")
     public ResponseEntity<List<AnalystInfoDTO>> getAnalystAfterDate(@RequestParam LocalDateTime afterDate) {
         return HttpResponseController.buildWithDate(analystFacade.getAnalystsAfterCreatedAt(afterDate),afterDate);
     }
 
+    //Не используй во фронте
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/date/before")
     public ResponseEntity<List<AnalystInfoDTO>> getAnalystBeforeDate(@RequestParam LocalDateTime beforeDate) {
@@ -62,6 +64,12 @@ public class AnalystController {
     @GetMapping("/params/login")
     public ResponseEntity<AnalystInfoDTO> getAnalystByLogin(@RequestParam String login) {
         return HttpResponseController.buildWithStringValue(analystFacade.getAnalystByLogin(login),login);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/idByLogin")
+    public ResponseEntity<Integer> getAnalystByIdByLogin(@RequestParam String login) {
+        return HttpResponseController.buildWithStringValue(analystFacade.getIdByLogin(login),login);
     }
 
     @PostMapping("/reg")

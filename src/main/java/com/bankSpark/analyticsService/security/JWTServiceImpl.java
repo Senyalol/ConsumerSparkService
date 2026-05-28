@@ -111,6 +111,16 @@ public class JWTServiceImpl implements JWTService {
 
     }
 
+    @Override
+    public String getRoleFromToken(String token) {
+        Claims claims = Jwts.parser()
+                .verifyWith(getSignInKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+        return claims.get("role", String.class);
+    }
+
     //Метод при прохождении аутентификации которого - пользователь получает токен
     @Override
     public JwtAuthenticationDTO getTokenForAnalyst(String login) {
@@ -148,6 +158,8 @@ public class JWTServiceImpl implements JWTService {
 
         return login.getSubject();
     }
+
+
 
     @Override
     public JwtAuthenticationDTO getOutFromAccount(String login) {

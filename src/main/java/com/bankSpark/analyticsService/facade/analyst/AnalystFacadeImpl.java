@@ -29,6 +29,11 @@ public class AnalystFacadeImpl implements AnalystFacade {
     }
 
     @Override
+    public int getIdByLogin(String login) {
+        return analystService.getIdByLogin(login);
+    }
+
+    @Override
     public List<AnalystInfoDTO> getAnalysts() {
         return analystService.getAnalysts();
     }

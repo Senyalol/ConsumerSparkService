@@ -23,16 +23,29 @@ public class AnalystRoleUpdateCheck implements AnalystUpdateCheck{
                 && newAnalystData.getRole() != null
                 && !newAnalystData.getRole().isBlank()) {
 
-            if(roles.contains(newAnalystData.getRole())){
+            try {
+                // Преобразуем строку в enum
+                Roles newRole = Roles.valueOf(newAnalystData.getRole().toUpperCase());
 
                 String oldRole = oldAnalystData.getRole();
-                oldAnalystData.setRole(newAnalystData.getRole());
-                LOGGER.info("Analyst - {} Role was updated from - {} to - {}",oldAnalystData.getLogin(),oldRole,newAnalystData.getRole());
-            }
+                oldAnalystData.setRole(newRole.name());  // или newRole.toString()
+                LOGGER.info("Analyst - {} Role was updated from - {} to - {}",
+                        oldAnalystData.getLogin(), oldRole, newAnalystData.getRole());
 
-            else{
-                throw new RuntimeException("Invalid role update");
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid role update: " + newAnalystData.getRole()
+                        + ". Available roles: " + Arrays.toString(Roles.values()));
             }
+//            if(roles.contains(newAnalystData.getRole())){
+//
+//                String oldRole = oldAnalystData.getRole();
+//                oldAnalystData.setRole(newAnalystData.getRole());
+//                LOGGER.info("Analyst - {} Role was updated from - {} to - {}",oldAnalystData.getLogin(),oldRole,newAnalystData.getRole());
+//            }
+//
+//            else{
+//                throw new RuntimeException("Invalid role update");
+//            }
 
         }
 

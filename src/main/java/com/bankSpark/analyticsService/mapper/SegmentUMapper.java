@@ -6,12 +6,23 @@ import com.bankSpark.analyticsService.ORM.User;
 import com.bankSpark.analyticsService.ORM.segment.SegmentUser;
 import com.bankSpark.analyticsService.annotation.Mapper;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Mapper
 public class SegmentUMapper {
+
+    private static final DecimalFormat R_MINUTES_FORMATTER = new DecimalFormat("#.##");
+
+    static {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
+        symbols.setDecimalSeparator('.');
+        R_MINUTES_FORMATTER.setDecimalFormatSymbols(symbols);
+    }
 
 
     //Из сущности в DTO
@@ -21,7 +32,13 @@ public class SegmentUMapper {
         segmentUserDTO.setUSegmentId(segmentuser.getId());
         segmentUserDTO.setUserId(segmentuser.getUser().getId());
         segmentUserDTO.setSegment(segmentuser.getSegment());
-        segmentUserDTO.setRMinutes(segmentuser.getRMinutes());
+
+        if (segmentuser.getRMinutes() != null) {
+            segmentUserDTO.setRMinutes(R_MINUTES_FORMATTER.format(segmentuser.getRMinutes()));
+        } else {
+            segmentUserDTO.setRMinutes("0");
+        }
+
         segmentUserDTO.setF(segmentuser.getF());
         segmentUserDTO.setM(segmentuser.getM());
         String UpdatedAtString = new Date(segmentuser.getUpdatedAt()).toString();

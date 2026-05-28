@@ -98,6 +98,13 @@ public class AnomalyServiceImpl implements AnomalyService {
     }
 
     @Override
+    public List<Anomaly> getAnomaliesByAvgCheckLess(Double avgCheckLess) {
+        return anomalyRepository.findAll().stream()
+                .filter(x -> x.getAvgCheck() <= avgCheckLess)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<Anomaly> getAnomaliesByUserId(int userId) {
         return anomalyRepository.findByUserId(userId);
     }

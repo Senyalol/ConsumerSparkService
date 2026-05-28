@@ -12,6 +12,8 @@ import java.util.List;
 
 public interface AnalystFacade {
 
+    int getIdByLogin(String login);
+
     //Получить всех аналитиков
     List<AnalystInfoDTO> getAnalysts();
 

@@ -14,6 +14,8 @@ public interface JWTService{
 
     String getLoginFromToken(String token);
 
+    String getRoleFromToken(String token);
+
     JwtAuthenticationDTO getOutFromAccount(String login);
 
     String getRoleAnalyst(String login);

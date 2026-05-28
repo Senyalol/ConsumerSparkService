@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5174"})
+@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173"})
 @RestController
 @RequestMapping("/api/anomaly")
 public class AnomalyController {
@@ -87,6 +87,12 @@ public class AnomalyController {
 //        return anomalyFacade.getAnomaliesByAvgCheck(min,max);
 
         return max == null ? HttpResponseController.buildWithPositiveValue(anomalyFacade.getAnomaliesByAvgCheck(min),min) : HttpResponseController.buildWithRange(anomalyFacade.getAnomaliesByAvgCheck(min,max),min,max);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
+    @GetMapping("/avg-check/less")
+    public ResponseEntity<List<AnomalyDTO>> getAnomaliesLessByCheck(@RequestParam Double check) {
+        return HttpResponseController.buildWithPositiveValue(anomalyFacade.getAnomaliesByAvgCheckLess(check),check);
     }
 
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")

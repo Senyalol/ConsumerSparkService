@@ -31,6 +31,8 @@ public interface AnomalyFacade {
     //Все аномалии после определенного времени
     List<AnomalyDTO> getAnomaliesByMaxEventTime(Long maxTime);
 
+    List<AnomalyDTO> getAnomaliesByAvgCheckLess(Double avgCheckLess);
+
     List<AnomalyDTO> getAnomaliesByAvgCheck(Double avgCheck);
 
     List<AnomalyDTO> getAnomaliesByAvgCheck(Double min, Double max);

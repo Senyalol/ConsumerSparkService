@@ -5,6 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 //import org.springframework.data.jpa.repository.Query;
 //import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
@@ -14,9 +16,15 @@ import java.util.Optional;
 @Repository
 public interface InviteTokenRepository extends JpaRepository<InviteToken, Integer> {
 
-    Optional<InviteToken> findByToken(String token);
+//    Optional<InviteToken> findByToken(String token);
 
-    Optional<InviteToken> findByTokenAndUsedFalseAndExpiresAtAfter(String token, LocalDateTime now);
+    @Query("SELECT t FROM InviteToken t WHERE t.token = :token")
+    Optional<InviteToken> findByToken(@Param("token") String token);
+
+//    Optional<InviteToken> findByTokenAndUsedFalseAndExpiresAtAfter(String token, LocalDateTime now);
+
+    @Query("SELECT t FROM InviteToken t WHERE t.token = :token AND t.used = false AND t.expiresAt > :now")
+    Optional<InviteToken> findByTokenAndUsedFalseAndExpiresAtAfter(@Param("token") String token, @Param("now") LocalDateTime now);
 
     // Удаление просроченных неиспользованных токенов
     @Modifying
