@@ -70,6 +70,7 @@ public class AnalystServiceImpl implements AnalystService {
             newAnalyst.setLogin(createAnalystDTO.getLogin());
             newAnalyst.setPassword(passwordEncoder.encode(createAnalystDTO.getPassword()));
             InviteToken inviteToken = tokenRepository.findByToken(createAnalystDTO.getToken()).get();
+
             newAnalyst.setRole(inviteToken.getRole());
             analystRepository.save(newAnalyst);
 

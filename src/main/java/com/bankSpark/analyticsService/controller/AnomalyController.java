@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173"})
@@ -74,6 +75,24 @@ public class AnomalyController {
     @GetMapping("/etime/less")
     public ResponseEntity<List<AnomalyDTO>> getAnomaliesByMinEventTime(@RequestParam Long min) {
         return HttpResponseController.buildWithPositiveValue(anomalyFacade.getAnomaliesByMinEventTime(min),min);
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
+    @GetMapping("/time/range")
+    public ResponseEntity<List<AnomalyDTO>> getAnomalyByEventTimeRange(@RequestParam LocalDateTime min , @RequestParam LocalDateTime max) {
+        return HttpResponseController.build(anomalyFacade.getAnomalyByEventTimeRange(min , max));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
+    @GetMapping("/time/more")
+    public ResponseEntity<List<AnomalyDTO>> getAnomalyByMaxEventTime(@RequestParam LocalDateTime max) {
+        return HttpResponseController.build(anomalyFacade.getAnomalyByMaxEventTime(max));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")
+    @GetMapping("/time/less")
+    public ResponseEntity<List<AnomalyDTO>> getAnomaliesByMinEventTime(@RequestParam LocalDateTime min) {
+        return HttpResponseController.build(anomalyFacade.getAnomalyByMinEventTime(min));
     }
 
     @PreAuthorize("hasAuthority('ADMIN') || hasAuthority('ANALYST')")

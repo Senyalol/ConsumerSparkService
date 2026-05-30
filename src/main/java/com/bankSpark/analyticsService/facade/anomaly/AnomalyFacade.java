@@ -2,6 +2,7 @@ package com.bankSpark.analyticsService.facade.anomaly;
 
 import com.bankSpark.analyticsService.DTO.anomaly.AnomalyDTO;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AnomalyFacade {
@@ -30,6 +31,12 @@ public interface AnomalyFacade {
 
     //Все аномалии после определенного времени
     List<AnomalyDTO> getAnomaliesByMaxEventTime(Long maxTime);
+
+    List<AnomalyDTO> getAnomalyByEventTimeRange(LocalDateTime minTime, LocalDateTime maxTime);
+
+    List<AnomalyDTO> getAnomalyByMinEventTime(LocalDateTime minTime);
+
+    List<AnomalyDTO> getAnomalyByMaxEventTime(LocalDateTime maxTime);
 
     List<AnomalyDTO> getAnomaliesByAvgCheckLess(Double avgCheckLess);
 

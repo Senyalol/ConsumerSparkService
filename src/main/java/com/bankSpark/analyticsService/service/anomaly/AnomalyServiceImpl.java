@@ -36,9 +36,9 @@ public class AnomalyServiceImpl implements AnomalyService {
     public List<Anomaly> getAnomalyByType(String type) {
 
         boolean existsType = Arrays.stream(AnomalyType.values())
-                .anyMatch(enumType -> enumType.name().equalsIgnoreCase(type));
+                .anyMatch(enumType -> enumType.name().equals(type));
 
-            return existsType ? anomalyRepository.findByType(type) : Collections.emptyList();
+            return existsType ? anomalyRepository.findByMessage(type) : Collections.emptyList();
     }
 
     @Override

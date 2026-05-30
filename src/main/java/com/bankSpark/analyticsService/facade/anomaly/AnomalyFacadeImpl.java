@@ -6,6 +6,8 @@ import com.bankSpark.analyticsService.mapper.AnomalyMapper;
 import com.bankSpark.analyticsService.service.anomaly.AnomalyService;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Facade
@@ -63,6 +65,31 @@ public class AnomalyFacadeImpl implements AnomalyFacade {
     @Override
     public List<AnomalyDTO> getAnomaliesByMaxEventTime(Long maxTime) {
         return anomalyMapper.toListDTO(anomalyService.getAnomaliesByMaxEventTime(maxTime));
+    }
+
+    @Override
+    public List<AnomalyDTO> getAnomalyByEventTimeRange(LocalDateTime minTime, LocalDateTime maxTime) {
+
+        Long minLongTime = minTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        Long maxLongTime = maxTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        return anomalyMapper.toListDTO(anomalyService.getAnomaliesByEventTimeRange(minLongTime, maxLongTime));
+    }
+
+    @Override
+    public List<AnomalyDTO> getAnomalyByMinEventTime(LocalDateTime minTime) {
+
+        Long minLongTime = minTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        return anomalyMapper.toListDTO(anomalyService.getAnomaliesByMinEventTime(minLongTime));
+    }
+
+    @Override
+    public List<AnomalyDTO> getAnomalyByMaxEventTime(LocalDateTime maxTime) {
+
+        Long maxLongTime = maxTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+
+        return anomalyMapper.toListDTO(anomalyService.getAnomaliesByMaxEventTime(maxLongTime));
     }
 
     @Override

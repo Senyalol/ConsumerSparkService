@@ -16,6 +16,8 @@ public interface AnomalyRepository extends JpaRepository<Anomaly,Integer> {
     List<Anomaly> findByType(String type);
     List<Anomaly> findByEventTime(Long eventTime);
 
+    List<Anomaly> findByMessage(String message);
+
     int countAnomaliesByUserId(int id);
 
     //Разобраться
