@@ -22,6 +22,8 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class KafkaConsumerService {
@@ -29,6 +31,9 @@ public class KafkaConsumerService {
     private final UserRepository userRepository;
     private final SegmentURepository segmentURepository;
     private final AnomalyRepository anomalyRepository;
+
+    private final Map<Integer, Integer> negativeMCounterMap = new ConcurrentHashMap<>();
+    private final Map<Integer,Integer> biggerThenAvgCheckMap = new ConcurrentHashMap<>();
 
     private final SegmentUMapper segmentUMapper;
     private final AnomalyMapper anomalyMapper;
@@ -108,33 +113,40 @@ public class KafkaConsumerService {
 
         try{
 
-            if(anomalyRepository.countAnomaliesByUserId(recievedAnomaly.getUser_id()) <= 2) {
-
                 User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
                 Anomaly anomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly, user);
 
                 if(isValidAnomalyValues(anomaly.getType(),anomaly.getMessage())){
 
-                    Double sumRound = Math.round(anomaly.getSum() * 100.0) / 100.0;
-                    anomaly.setSum(sumRound);
-                    Double avgCheckRound = Math.round(anomaly.getAvgCheck() * 100.0) / 100.0;
-                    anomaly.setAvgCheck(avgCheckRound);
-                    anomalyRepository.save(anomaly);
+                    if(recievedAnomaly.getType().equals(AnomalyType.NEGATIVE_M)){
+
+                        writeNegativeMAnomaly(recievedAnomaly);
+
+                    }
+
+                    else if(recievedAnomaly.getType().equals(AnomalyType.BIGGER_THEN_AVG_CHECK)){
+
+                        writeBiggerThenAvgCheck(recievedAnomaly);
+
+                    }
+
+                    else {
+
+                        Double sumRound = Math.round(anomaly.getSum() * 100.0) / 100.0;
+                        anomaly.setSum(sumRound);
+                        Double avgCheckRound = Math.round(anomaly.getAvgCheck() * 100.0) / 100.0;
+                        anomaly.setAvgCheck(avgCheckRound);
+                        anomalyRepository.save(anomaly);
+
+                    }
+
                 }
                 else{
                     throw new AnomalyException();
                 }
 
-            }
 
-            else if(anomalyRepository.countAnomaliesByUserId(recievedAnomaly.getUser_id()) > 2) {
 
-                Anomaly oldestAnomaly = anomalyRepository.findOldestAnomalyByUserId(recievedAnomaly.getUser_id()).get();
-                User user = userRepository.findById(recievedAnomaly.getUser_id()).get();
-                updateAnomaly(oldestAnomaly,anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,user));
-                anomalyRepository.save(oldestAnomaly);
-
-            }
 
         }
         catch (Exception e){
@@ -144,6 +156,54 @@ public class KafkaConsumerService {
 
     }
 
+    private void writeBiggerThenAvgCheck(KafkaAnomalyDTO recievedAnomaly) {
+
+        User certainUser = userRepository.findById(recievedAnomaly.getUser_id()).get();
+        int certainUserId = certainUser.getId();
+
+        int localCount = biggerThenAvgCheckMap.getOrDefault(certainUserId,0);
+
+        if(localCount < 5){
+            biggerThenAvgCheckMap.put(certainUserId,localCount+1);
+        }
+        else{
+
+            Anomaly certainAnomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,certainUser);
+
+            Double sumRound = Math.round(certainAnomaly.getSum() * 100.0) / 100.0;
+            certainAnomaly.setSum(sumRound);
+            Double avgCheckRound = Math.round(certainAnomaly.getAvgCheck() * 100.0) / 100.0;
+            certainAnomaly.setAvgCheck(avgCheckRound);
+
+            anomalyRepository.save(certainAnomaly);
+
+        }
+
+    }
+
+    private void writeNegativeMAnomaly(KafkaAnomalyDTO recievedAnomaly) {
+
+        User certainUser = userRepository.findById(recievedAnomaly.getUser_id()).get();
+        int certainUserId = certainUser.getId();
+
+        int localCount = negativeMCounterMap.getOrDefault(certainUserId,0);
+
+        if(localCount < 5){
+            negativeMCounterMap.put(certainUserId,localCount+1);
+        }
+        else{
+
+            Anomaly certainAnomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,certainUser);
+
+            Double sumRound = Math.round(certainAnomaly.getSum() * 100.0) / 100.0;
+            certainAnomaly.setSum(sumRound);
+            Double avgCheckRound = Math.round(certainAnomaly.getAvgCheck() * 100.0) / 100.0;
+            certainAnomaly.setAvgCheck(avgCheckRound);
+
+            anomalyRepository.save(certainAnomaly);
+        }
+
+    }
 
     //Обновление существующего сегмента
     private void updateSegment(SegmentUser oldSegment, SegmentUser newSegmentData) {
