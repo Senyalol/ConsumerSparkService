@@ -34,6 +34,7 @@ public class KafkaConsumerService {
 
     private final Map<Integer, Integer> negativeMCounterMap = new ConcurrentHashMap<>();
     private final Map<Integer,Integer> biggerThenAvgCheckMap = new ConcurrentHashMap<>();
+    private final Map<Integer,Double> biggerThenAvgCheckSumMap = new ConcurrentHashMap<>();
 
     private final SegmentUMapper segmentUMapper;
     private final AnomalyMapper anomalyMapper;
@@ -162,20 +163,30 @@ public class KafkaConsumerService {
         int certainUserId = certainUser.getId();
 
         int localCount = biggerThenAvgCheckMap.getOrDefault(certainUserId,0);
+        Double certainAnomalySum = biggerThenAvgCheckSumMap.getOrDefault(certainUserId,0.0);
 
         if(localCount < 5){
             biggerThenAvgCheckMap.put(certainUserId,localCount+1);
+
+            Double receivedSum = recievedAnomaly.getSum();
+            biggerThenAvgCheckSumMap.put(certainUserId,certainAnomalySum+receivedSum);
+
         }
-        else{
+
+        else if(localCount == 5){
 
             Anomaly certainAnomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,certainUser);
 
-            Double sumRound = Math.round(certainAnomaly.getSum() * 100.0) / 100.0;
+            Double receivedAnomalySum = certainAnomalySum + recievedAnomaly.getSum();
+            Double sumRound = Math.round(receivedAnomalySum * 100.0) / 100.0;
             certainAnomaly.setSum(sumRound);
             Double avgCheckRound = Math.round(certainAnomaly.getAvgCheck() * 100.0) / 100.0;
             certainAnomaly.setAvgCheck(avgCheckRound);
+            biggerThenAvgCheckSumMap.put(certainUserId,0.0);
 
             anomalyRepository.save(certainAnomaly);
+
+            biggerThenAvgCheckMap.remove(certainUserId);
 
         }
 
@@ -191,7 +202,7 @@ public class KafkaConsumerService {
         if(localCount < 5){
             negativeMCounterMap.put(certainUserId,localCount+1);
         }
-        else{
+        else if(localCount == 5){
 
             Anomaly certainAnomaly = anomalyMapper.fromKafkaDTOtoEntity(recievedAnomaly,certainUser);
 
@@ -201,6 +212,8 @@ public class KafkaConsumerService {
             certainAnomaly.setAvgCheck(avgCheckRound);
 
             anomalyRepository.save(certainAnomaly);
+
+            negativeMCounterMap.remove(certainUserId);
         }
 
     }
